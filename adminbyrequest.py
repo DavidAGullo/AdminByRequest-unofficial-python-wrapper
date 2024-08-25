@@ -8,52 +8,51 @@ class AdminByRequest:
 # /auditlog - Audit Log API extension
 
     # Get all audit logs as JSON
-    def get_all_audit_logs(self):
-        audit_logs = []
+    def get_auditlog(self):
         url = self.url + 'auditlog'
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
-        return audit_logs
+        auditlogs = response.json()
+        return auditlogs
     
     # Get audit log by ID as JSON
-    def get_audit_log_by_id(self, id):
-        audit_log = []
+    def get_auditlog_id(self, id: int):
         url = self.url + 'auditlog/' + str(id)
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
-        return audit_log
+        auditlog_id = response.json()
+        return auditlog_id
     
     # Get audit log by computer as JSON
-    def get_audit_log_by_computer(self, computername):
-        audit_logs = []
+    def get_auditlog_computer(self, computername: str):
         url = self.url + 'computers/' + computername + "/auditlog"
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
-        return audit_logs
+        return response.json()
     
     # Get audit log by user as JSON
-    def get_audit_log_by_user(self, username):
-        audit_logs = []
+    def get_auditlog_username(self, username: str):
         url = self.url + 'users/' + username + "/auditlog"
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
-        return audit_logs
+        return response.json()
     
     # Get the timeNow Value which will be used to calculate until the next delta [This number increases by second]
-    def get_delta_audit_logs(self):
-        audit_logs = []
+    def get_auditlogs_delta(self):
         url = self.url + 'auditlog/delta'
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
-        return audit_logs["timeNow"]
+        data = response.json()
+        time = data['timeNow']
+        return time
     
