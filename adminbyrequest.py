@@ -134,7 +134,7 @@ class AdminByRequest:
     # Functional Functions
     # Get Computers where InventoryDate is older than X days
     def get_inventory_by_date(self, days: int, limit: int=10000, unavailable=False):
-        # Convert days to "2024-08-27T14:04:14.887" format
+        # Convert days to "YYYY-MM-DD T HH:MM:SS.MlS" format
         days = datetime.datetime.now() - datetime.timedelta(days=days)
         days = days.strftime('%Y-%m-%dT%H:%M:%S.%f')[:- 3]
         
