@@ -3,10 +3,29 @@
 Feel free to use this for your projects if you are developing things with the Admin by Request API. I mostly use this to show proof of concepts of all that is available with the API. This project is still a work in progress so sorry if everything isn't available yet. This is not associated with the Admin by Request company and contains nothing special outside of the already available Public API documented at [Public API &gt;  API Overview](https://www.adminbyrequest.com/en/docs/api-overview)
 
 ## Outline
+- Required
+- Getting Started
+- Functions
 
-## Functions
+### Required
+python (tested on version 3.11.4)
+#### Packages
+- requests
 
-### Auditlog API:
+### Getting Started
+Example Setup:
+```python
+from adminbyrequest import AdminByRequest, ABRDatacenter # AdminByRequest is the function class, ABRDataCenter is for Enums
+
+abr = AdminByRequest(APIKEY, ABRDatacenter.dc2) #API and What Datacenter (dc1 = EU, dc2 = US)
+
+abr.get_auditlog(limit = 50)
+#Returns the First 50 auditlog reports in JSON
+```
+
+### Functions
+
+#### Auditlog API:
 
 This targets all the Auditlog API which includes 5 GET resources:
 
@@ -142,7 +161,7 @@ def get_auditlog_id(fulllog: bool=False):
 # Returns Delta time w/ or w/o Auditlog
 ```
 
-### Inventory API:
+#### Inventory API:
 This targets all the Inventory API which includes 3 GET, and 2 DELETE resources:
 
 **GET**
