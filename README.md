@@ -301,3 +301,20 @@ def delete_inventory_computer(computername):
        
 # Delete's Item by Computer Name
 ```
+
+###### **Get All Inventory Items Older than X Amount of Days** - Returns as a object where you can pull specic data components
+This function is a special function designed to show how you can setup your own inactivity deleting tool with the API, you may need to use a combination of this and then you can use the Delete by ID or Computer Name function
+
+**What it currently grabs**
+- id: Returns the ID's
+- name: Returns the Computer Name
+- inventoryDate: Returns last Inventory Sync
+- inventoryAvailable: Returns if the Computer is Available (This will always be true if unavailable parameter is set False)
+- abrClientVersion: Returns Version of Admin By Request installed
+- operatingSystem: Returns OS of Computer
+
+**Parameters**
+1. days - How many days back Minimum since laster Inventory Time (30 would be any computer that hasn't sync'd in a month)
+2. limit - the Max amount of records to return, by default its 10000
+3. unavailable - by default this is false and therefore won't return any items outside of inventory
+
