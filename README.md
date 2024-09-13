@@ -3,17 +3,23 @@
 Feel free to use this for your projects if you are developing things with the Admin by Request API. I mostly use this to show proof of concepts of all that is available with the API. This project is still a work in progress so sorry if everything isn't available yet. This is not associated with the Admin by Request company and contains nothing special outside of the already available Public API documented at [Public API &gt;  API Overview](https://www.adminbyrequest.com/en/docs/api-overview)
 
 ## Outline
-- Required
-- Getting Started
-- Functions
 
-### Required
+- [Required](#required)
+- [Getting Started](#getting-started)
+- [Functions](#functions)
+
+## Required
+
 python (tested on version 3.11.4)
-#### Packages
+
+#### Package(s)
+
 - requests
 
-### Getting Started
+## Getting Started
+
 Example Setup:
+
 ```python
 from adminbyrequest import AdminByRequest, ABRDatacenter # AdminByRequest is the function class, ABRDataCenter is for Enums
 
@@ -23,7 +29,7 @@ abr.get_auditlog(limit = 50)
 #Returns the First 50 auditlog reports in JSON
 ```
 
-### Functions
+## Functions
 
 #### Auditlog API:
 
@@ -38,10 +44,12 @@ This targets all the Auditlog API which includes 5 GET resources:
 ##### GET Methods -
 
 ###### **Get all the Auditlogs** - This just returns all available auditlogs in JSON Format
+
 This grabs all of the Auditlogs up to 10000 if you are over that or want to modify that value simply change the parameters
 
 - limit(optional) = default is 10000 which is the max ABR can handle in 1 request
 - offset(optional) = default is 0 but this will change where the record starts so if you have more than Admin by Request 10000 limit, you can use offset to handle Pagination
+
 ```python
 # The function
 def get_auditlog(self, limit:int = 10000, offset: int=0):
@@ -123,7 +131,6 @@ def get_auditlog(self, limit:int = 10000, offset: int=0):
 #       }, #... and so on
 ```
 
-
 ###### **Get the Auditlog by it's ID** - Returns one Auditlog
 
 ```python
@@ -152,6 +159,7 @@ def get_auditlog_username(username='davidap'):
 ```
 
 ###### **Get the Auditlog Delta** - Returns the Delta
+
 To enable the full report for Auditlog Delta change fullLog to True
 
 ```python
@@ -162,20 +170,24 @@ def get_auditlog_id(fulllog: bool=False):
 ```
 
 #### Inventory API:
+
 This targets all the Inventory API which includes 3 GET, and 2 DELETE resources:
 
 **GET**
+
 1. /inventory - Returns a full list of Inventory in your portal
 2. /inventory/[id] - Returns a specfic Item from inventory by its ID value
 3. /inventory/[computername] - Returns a specfic Item from inventory by its Computer Name value
 
 **DELETE**
+
 1. /inventory/[id] - Deletes Inventory Item by ID
 2. /inventory/[computername] - Deletes Inventory Item by Computer Name
 
 ##### GET Methods -
 
 ###### **Get all Inventory** - Returns all the inventory in JSON Format
+
 By default this method grabs all computers in inventory up to 10000 if you are over that or want to modify that value simply change the parameters
 
 - limit(optional) = default is 10000 which is the max ABR can handle in 1 request
@@ -283,6 +295,7 @@ def get_inventory(limit: int=10000, offset: int=0):
 #  }
 #]
 ```
+
 ###### **Get Inventory by ID** - Returns the computer by ID
 
 ```python
@@ -308,7 +321,7 @@ def get_inventory_id(computername):
 ```python
 # The function
 def delete_inventory_id(id):
-       
+     
 # Delete's Item by ID
 ```
 
@@ -317,14 +330,16 @@ def delete_inventory_id(id):
 ```python
 # The function
 def delete_inventory_computer(computername):
-       
+     
 # Delete's Item by Computer Name
 ```
 
 ###### **Get All Inventory Items Older than X Amount of Days** - Returns as a object where you can pull specic data components
+
 This function is a special function designed to show how you can setup your own inactivity deleting tool with the API, you may need to use a combination of this and then you can use the Delete by ID or Computer Name function
 
 **What it currently grabs**
+
 - id: Returns the ID's
 - name: Returns the Computer Name
 - inventoryDate: Returns last Inventory Sync
@@ -333,7 +348,7 @@ This function is a special function designed to show how you can setup your own 
 - operatingSystem: Returns OS of Computer
 
 **Parameters**
+
 1. days - How many days back Minimum since laster Inventory Time (30 would be any computer that hasn't sync'd in a month)
 2. limit - the Max amount of records to return, by default its 10000
 3. unavailable - by default this is false and therefore won't return any items outside of inventory
-
