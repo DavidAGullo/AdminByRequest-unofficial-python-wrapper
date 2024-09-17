@@ -13,17 +13,19 @@ Feel free to use this for your projects if you are developing things with the Ad
 
 - [Auditlog API](#auditlog-api)
 - [Inventory API](#inventory-api)
+
 4. [Admin by Request - Request Objects](#admin-by-request---request-objects)
 
 ## Required
 
 **Tested Python Version(s)**
+
 - Version 3.11.4
 - Version 3.12.3
 
 #### Package(s)
 
-- requests
+- [requests](https://pypi.org/project/requests/)
 
 ## Getting Started
 
@@ -277,12 +279,16 @@ for item in value:
 3. unavailable - by default this is false and therefore won't return any items outside of inventory
 
 ## Admin by Request - Request Objects
+
 ### Summary
+
 This basically transform the json format to a much easier format to call and organize with, these are special objects I've added for this purpose
+
 ##### ABRRequestInventoryObject
+
 - .id: returns ID for the Inventory, may be used for deleting or referencing specifically for other requests.
 - .name: gives Inventory's computer name, can also be used to delete or reference specifically for other requests
-- .inventoryAvailable: Is the inventory available 
+- .inventoryAvailable: Is the inventory available
 - .inventoryDate: This will return the value of the last inventory sync (I wouldn't recommend doing anything less than 14 days as some machines may not sync for multiple days and this can be attributed to a few reasons, and this is expected behavior)
 - .clientVersion - Version of Admin by Request Installed
 - .clientInstall - When Admin by Request was Installed
@@ -352,6 +358,7 @@ This basically transform the json format to a much easier format to call and org
 - .software - An Array. (Empty)
 
 ##### ABRRequestAuditlogObject
+
 - .installs - An array that captures what was installed
 - .uninstalls - An array that captures what was uninstalled
 - .elevatedApplications - An array that captures what application was elevated
