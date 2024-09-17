@@ -13,6 +13,7 @@ Feel free to use this for your projects if you are developing things with the Ad
 
 - [Auditlog API](#auditlog-api)
 - [Inventory API](#inventory-api)
+4. [Admin by Request - Request Objects](#admin-by-request---request-objects)
 
 ## Required
 
@@ -59,89 +60,15 @@ This grabs all of the Auditlogs up to 10000 if you are over that or want to modi
 ```python
 # The function
 def get_auditlog(self, limit:int = 10000, offset: int=0):
-        return auditlogs
-# Returns
-# {
-#           "installs": [],
-#           "uninstalls": [
-#               {
-#                   "application": "Admin By Request Workstation",
-#                   "version": "8.3.1.0",
-#                   "vendor": "FastTrack Software"
-#               }
-#           ],
-#           "elevatedApplications": [
-#               {
-#                   "name": "Admin By Request Workstation",
-#                   "path": "Z:\\Downloads",
-#                   "file": "Admin By Request 8.3.msi",
-#                   "version": "8.4.0.0",
-#                   "vendor": "Admin By Request ApS",
-#                   "sha256": "420asdfasdfasdfBlaze6d5f41s62It",
-#                   "scanResult": "Clean",
-#                   "scanResultCode": 0,
-#                   "threat": null,
-#                   "virustotalLink": "https://www.virustotal.com/latest-scan/420asdfasdfasdfBlaze6d5f41s62It"
-#               }
-#           ],
-#           "scanResults": [],
-#           "id": 95423844,
-#           "traceNo": "76136610",
-#           "settingsName": "Global",
-#           "type": "Run As Admin",
-#           "typeCode": 0,
-#           "status": "Finished",
-#           "statusCode": 2,
-#           "application": {
-#               "file": "Admin By Request 8.3.msi",
-#               "path": "Z:\\Downloads",
-#               "name": "Admin By Request Workstation",
-#               "vendor": "Admin By Request ApS",
-#               "version": "8.4.0.0",
-#               "sha256": "420asdfqwemnAasdfBl666aze6d5f41s62It",
-#               "scanResult": "Clean",
-#               "scanResultCode": 0,
-#               "threat": null,
-#               "virustotalLink": "https://www.virustotal.com/latest-scan/420asdftutkfcasddfBlaze6d5f41s62It",
-#               "preapproved": false
-#           },
-#           "user": {
-#               "account": "AZUREAD\\DPerson",
-#               "fullName": "David Person",
-#               "email": "test@test.com",
-#               "phone": "1555555555",
-            },
-#               "isAdmin": true
-#           "computer": {
-#               "name": "ABR0234",
-#               "platform": "Windows",
-#               "platformCode": 0,
-#               "make": "VMware, Inc.",
-#               "model": "VMware20,1"
-#           },
-#           "reason": null,
-#           "approvedBy": null,
-#           "approvedByEmail": null,
-#           "deniedReason": null,
-#           "deniedBy": null,
-#           "deniedByEmail": null,
-#           "ssoValidated": false,
-#           "requestTime": "2024-01-31T15:40:06",
-#           "requestTimeUTC": "2024-01-31T20:40:06",
-#           "startTime": "2024-01-31T15:40:06",
-#           "startTimeUTC": "2024-01-31T20:40:06",
-#           "endTime": "2024-01-31T15:40:23",
-#           "endTimeUTC": "2024-01-31T20:40:23",
-#           "responseTime": null,
-#           "auditlogLink": "https://www.adminbyrequest.com/AuditLog?Page=AppElevations&ID=76136610&ShowFilter=false"
-#       }, #... and so on
+        return auditlog[]
+# No longer returns a JSON but instead an object with all the values
 ```
 
 ###### **Get the Auditlog by it's ID** - Returns one Auditlog
 
 ```python
 def get_auditlog_id(id=95423844):
-	returns auditlog_id
+	returns auditlog
 
 # Returns only the auditlogs matching the ID
 ```
@@ -150,7 +77,7 @@ def get_auditlog_id(id=95423844):
 
 ```python
 def get_auditlog_id(computername='USCORPWIN11'):
-	returns auditlog_id
+	returns auditlog
 
 # Returns only the auditlogs with the computer name
 ```
@@ -159,7 +86,7 @@ def get_auditlog_id(computername='USCORPWIN11'):
 
 ```python
 def get_auditlog_username(username='davidap'):
-	returns auditlog_id
+	returns auditlog
 
 # Returns only the auditlogs from the user with username
 ```
@@ -169,10 +96,10 @@ def get_auditlog_username(username='davidap'):
 To enable the full report for Auditlog Delta change fullLog to True
 
 ```python
-def get_auditlog_id(fulllog: bool=False):
-	returns auditlog_id
-
-# Returns Delta time w/ or w/o Auditlog
+def get_auditlog_delta(fulllog: bool=False):
+	returns auditlog['timeNow']
+# Returns Delta time w/ or w/o Auditlog 
+# Returns as JSON
 ```
 
 #### Inventory API:
@@ -202,104 +129,8 @@ By default this method grabs all computers in inventory up to 10000 if you are o
 ```python
 # The function
 def get_inventory(limit: int=10000, offset: int=0):
-        return get_inventory
-# Returns
-#[
-#  {
-#    "id": 51342264,
-#    "name": "COMPUTERNAME",
-#    "inventoryAvailable": true,
-#    "inventoryDate": "2024-08-27T14:04:14.887",
-#    "abrClientVersion": "8.4.0",
-#    "abrClientInstallDate": "2024-08-27T13:27:40",
-#    "notes": null,
-#    "user": {
-#      "account": "davidap",
-#      "fullName": "David A. Person",
-#      "email": null,
-#      "phone": null,
-#      "isAdmin": false,
-#      "domain": "ABR-Domain",
-#      "isDomainJoined": true,
-#      "isAzureJoined": false,
-#      "orgUnit": "Users",
-#      "orgUnitPath": "\\Users",
-#      "groups": null
-#    },
-#    "owner": {
-#      "account": "LOCAL-DAVID",
-#      "fullName": "David"
-#    },
-#    "computer": {
-#      "domain": "ABR-DOMAIN",
-#      "isDomainJoined": true,
-#      "isAzureJoined": true,
-#      "orgUnit": "PROD",
-#      "orgUnitPath": "\\TEST\\PROD",
-#      "groups": null,
-#      "localAdmins": [
-#        "ABR-DOMAIN\\davidap-abr",
-#        "ABR-DOMAIN\\Domain Admins",
-#        "Admin",
-#        "Administrator",
-#        "AzureAD\\Company Administrators",
-#        "AzureAD\\Device Administrators",
-#        "S-1-12-1-4072261373-1340022675-2907612035-1391370097"
-#      ],
-#      "users": []
-#    },
-#    "operatingSystem": {
-#      "platform": "Windows",
-#      "platformCode": 0,
-#      "name": "Windows 11 Pro",
-#      "version": "23H2",
-#      "release": 2009,
-#      "build": 22631,
-#      "buildUpdate": 4037,
-#      "type": "Workstation",
-#      "typeCode": 0,
-#      "bits": 64,
-#      "installDate": "2023-09-18T00:00:00"
-#    },
-#    "hardware": {
-#      "make": "VMware, Inc.",
-#      "model": "VMware20,1",
-#      "type": "Desktop",
-#      "typeCode": 1,
-#      "serviceTag": "asdfas;ldkfjas",
-#      "cpu": "12th Gen Intel Core i7-12700H",
-#      "cpuSpeed": 2688,
-#      "cpuCores": 4,
-#      "diskSize": 136,
-#      "diskFree": 63,
-#      "diskStatus": "OK",
-#      "memory": 4293,
-#      "noMonitors": 1,
-#      "monitorResolution": "1024x768",
-#      "bitlockerEnabled": false,
-#      "isCompliant": false,
-#      "tpmEnabled": true,
-#      "tpmVersion": "2.0"
-#    },
-#    "network": {
-#      "publicIP": "[PUBLICIP]",
-#      "privateIP": "[PRIVATEIP]",
-#      "macAddress": "[MACADDRESS]",
-#      "nicSpeed": "1000 mbit",
-#      "hostName": null
-#    },
-#    "location": {
-#      "city": "New York City",
-#      "region": "New York",
-#      "country": "United States",
-#      "latitude": "0",
-#      "longitude": "0",
-#      "googleMapsLink": "https://maps.google.com/?q=43.064800,-88.094500",
-#      "hourOffset": -6
-#    },
-#    "software": null
-#  }
-#]
+        return get_inventory[]
+# No longer returns a JSON but instead an object with all the values
 ```
 
 ###### **Get Inventory by ID** - Returns the computer by ID
