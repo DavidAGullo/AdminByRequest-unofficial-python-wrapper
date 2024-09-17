@@ -5,15 +5,11 @@ Feel free to use this for your projects if you are developing things with the Ad
 ## Outline
 
 1. [Required](#required)
-
-- [Package(s)](#packages)
-
+   - [Package(s)](#packages)
 2. [Getting Started](#getting-started)
 3. [Functions](#functions)
-
-- [Auditlog API](#auditlog-api)
-- [Inventory API](#inventory-api)
-
+   - [Auditlog API](#auditlog-api)
+   - [Inventory API](#inventory-api)
 4. [Admin by Request - Request Objects](#admin-by-request---request-objects)
 
 ## Required
