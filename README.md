@@ -18,6 +18,10 @@ Feel free to use this for your projects if you are developing things with the Ad
 
 ## Required
 
+**Python**
+
+* 3.8+ (no tested)
+
 **Tested Python Version(s)**
 
 - Version 3.11.4
