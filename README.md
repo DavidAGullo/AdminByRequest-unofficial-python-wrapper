@@ -17,7 +17,9 @@ Feel free to use this for your projects if you are developing things with the Ad
 
 ## Required
 
-python (tested on version 3.11.4)
+**Tested Python Version(s)**
+- Version 3.11.4
+- Version 3.12.3
 
 #### Package(s)
 
