@@ -35,7 +35,7 @@ from adminbyrequest import AdminByRequest, ABRDatacenter # AdminByRequest is the
 abr = AdminByRequest(APIKEY, ABRDatacenter.dc2) #API and What Datacenter (dc1 = EU, dc2 = US)
 
 abr.get_auditlog(limit = 50)
-#Returns the First 50 auditlog reports in JSON
+#Returns the First 50 auditlog reports
 ```
 
 ## Functions
@@ -52,7 +52,7 @@ This targets all the Auditlog API which includes 5 GET resources:
 
 ##### GET Methods -
 
-###### **Get all the Auditlogs** - This just returns all available auditlogs in JSON Format
+###### **Get all the Auditlogs** - This just returns all available auditlogs in Object Format
 
 This grabs all of the Auditlogs up to 10000 if you are over that or want to modify that value simply change the parameters
 
@@ -121,7 +121,7 @@ This targets all the Inventory API which includes 3 GET, and 2 DELETE resources:
 
 ##### GET Methods -
 
-###### **Get all Inventory** - Returns all the inventory in JSON Format
+###### **Get all Inventory** - Returns all the inventory in Object Format
 
 By default this method grabs all computers in inventory up to 10000 if you are over that or want to modify that value simply change the parameters
 
