@@ -7,7 +7,9 @@ Feel free to use this for your projects if you are developing things with the Ad
 - [Required](#required)
 - [Getting Started](#getting-started)
 - [Functions](#functions)
+
 a. [Auditlog API](#auditlog-api)
+
 b. [Inventory API](#inventory-api)
 
 ## Required
