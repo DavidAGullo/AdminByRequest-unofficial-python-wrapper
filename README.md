@@ -4,13 +4,11 @@ Feel free to use this for your projects if you are developing things with the Ad
 
 ## Outline
 
-- [Required](#required)
-- [Getting Started](#getting-started)
-- [Functions](#functions)
-
-a. [Auditlog API](#auditlog-api)
-
-b. [Inventory API](#inventory-api)
+1. [Required](#required)
+2. [Getting Started](#getting-started)
+3. [Functions](#functions)
+- [Auditlog API](#auditlog-api)
+- [Inventory API](#inventory-api)
 
 ## Required
 
@@ -325,7 +323,7 @@ def get_inventory_id(computername):
 ```python
 # The function
 def delete_inventory_id(id):
-     
+   
 # Delete's Item by ID
 ```
 
@@ -334,7 +332,7 @@ def delete_inventory_id(id):
 ```python
 # The function
 def delete_inventory_computer(computername):
-     
+   
 # Delete's Item by Computer Name
 ```
 
