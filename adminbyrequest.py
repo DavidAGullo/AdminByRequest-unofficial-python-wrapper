@@ -107,7 +107,7 @@ class ABRRequestInventoryObject:
         name, 
         inventoryAvailable='', 
         inventoryDate='', 
-        clientVerion='', 
+        clientVersion='', 
         clientInstall='', 
         notes='', 
         user_account='',
@@ -177,7 +177,7 @@ class ABRRequestInventoryObject:
         self.name = name
         self.inventoryAvailable = inventoryAvailable
         self.inventoryDate = inventoryDate
-        self.clientVersion = clientVerion
+        self.clientVersion = clientVersion
         self.clientInstall = clientInstall
         self.notes = notes
         self.user_account = user_account
@@ -807,7 +807,7 @@ class AdminByRequest:
         # Convert days to "YYYY-MM-DD T HH:MM:SS.MlS" format
         days = datetime.datetime.now() - datetime.timedelta(days=days)
         days = days.strftime('%Y-%m-%dT%H:%M:%S.%f')[:- 3]
-        
+
         url = self.url + 'inventory?limit=' + str(limit)
         headers = {
             "apikey": self.api_key
