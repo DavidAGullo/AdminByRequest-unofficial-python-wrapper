@@ -244,7 +244,201 @@ class ABRRequestInventoryObject:
         self.hourOffset = hourOffset
         self.software = software
         
+class ABRRequestRequestsObject:
+    def __init__(
+        self,
+        scanResults = None,
+        id: int=0,
+        traceNo = '',
+        settingsName = '',
+        runType = '',
+        typeCode: int = 0,
+        status = '',
+        statusCode: int = 0,
+        application_file = '',
+        application_name = '',
+        application_vendor = '',
+        application_version = '',
+        application_sha256 = '',
+        application_scanResult = '',
+        application_scanResultCode: int = 0,
+        application_threat = '',
+        application_virustotalLink = '',
+        user_account = '',
+        user_fullname = '',
+        user_email = '',
+        user_phone = '',
+        computer_name = '',
+        computer_platform = '',
+        computer_platformCode: int = 0,
+        computer_make = '',
+        computer_model = '',
+        reason = '',
+        approvedBy = '',
+        approvedByEmail = '',
+        deniedReason = '',
+        deniedBy = '',
+        deniedByEmail = '',
+        requestTime = '',
+        auditlogLink = ''):
+        self.scanResults = scanResults
+        self.id = id
+        self.traceNo = traceNo
+        self.settingsName = settingsName
+        self.runType = runType
+        self.typeCode = typeCode
+        self.status = status
+        self.statusCode = statusCode
+        self.application_file = application_file
+        self.application_name = application_name
+        self.application_vendor = application_vendor
+        self.application_version = application_version
+        self.application_sha256 = application_sha256
+        self.application_scanResult = application_scanResult
+        self.application_scanResultCode = application_scanResultCode
+        self.application_threat = application_threat
+        self.application_virustotalLink = application_virustotalLink
+        self.user_account = user_account
+        self.user_fullname = user_fullname
+        self.user_email = user_email
+        self.user_phone = user_phone
+        self.computer_name = computer_name
+        self.computer_platform = computer_platform
+        self.computer_platformCode = computer_platformCode
+        self.computer_make = computer_make
+        self.computer_model = computer_model
+        self.reason = reason
+        self.approvedBy = approvedBy
+        self.approvedByEmail = approvedByEmail
+        self.deniedReason = deniedReason
+        self.deniedBy = deniedBy
+        self.deniedByEmail = deniedByEmail
+        self.requestTime = requestTime
+        self.auditlogLink = auditlogLink
         
+class ABRRequestEventObjects:
+    def __init__(
+        self,
+        id: int=0,
+        eventCode: int=0,
+        eventLevel: int=0,
+        eventText='',
+        eventTime='',
+        eventTimeUTC='',
+        computerName='',
+        userAccount='',
+        userName='',
+        alertAccount='',
+        auditLogURL='',
+        rollback='',
+        additionalData='',
+        application_file='',
+        application_path='',
+        application_name='',
+        application_vendor='',
+        application_version='',
+        application_sha256=''):
+        self.id = id
+        self.eventCode = eventCode
+        self.eventLevel = eventLevel
+        self.eventText = eventText
+        self.eventTime = eventTime
+        self.eventTimeUTC = eventTimeUTC
+        self.computerName = computerName
+        self.userAccount = userAccount
+        self.userName = userName
+        self.alertAccount = alertAccount
+        self.auditLogURL = auditLogURL
+        self.rollback = rollback
+        self.additionalData = additionalData
+        self.application_file = application_file
+        self.application_path = application_path
+        self.application_name = application_name
+        self.application_vendor = application_vendor
+        self.application_version = application_version
+        self.application_sha256 = application_sha256
+           
+class ABREventCodes(Enum):
+    User_Added_Admin = 1
+    User_Removed_Admin = 2
+    Group_Removed_Admin = 3
+    Audited_Admin_Login = 5
+    UnAudited_Admin_Login = 6
+    Support_Assist_Initiated = 8
+    Password_Changed = 10
+    LocalUser_Disabled = 11
+    LocalUser_Enabled = 12
+    LocalUser_Created = 13
+    LocalUser_Deleted = 14
+    PolicyRegistry_Changed = 20
+    PolicyRegistry_Added = 21
+    Uninstall_Attempted = 30
+    Uninstall_byPin = 31
+    Uninstall_Pin_Failed = 32
+    ABR_Installed = 40
+    ABR_Uninstalled = 41
+    ABR_Server_Installed = 42
+    ABR_Server_Uninstalled = 43
+    ABR_Diagnostics_Sent = 50
+    User_ResturedAdmin = 60
+    Group_RestoredAdmin = 61
+    Breakglass_Created = 70
+    Breakglass_Removed = 71
+    Breakglass_Login = 72
+    Breakglass_ClockTampering = 73
+    Azure_DeviceAdmin_Restored = 80
+    Azure_CompanyAdmin_Restored = 81
+    AdminSession_Denied = 90
+    AdminSession_ClockTampering = 91
+    ExecutionBlocked_Policy = 92
+    ExecutionBlocked_Malware = 93
+    ExecutionBlocked_LikeyMalware = 94
+    AdminSession_Pin_Used = 95
+    ApplicationBlocked_Pin_Used = 97
+    ElevatedApplication_Pin_Used = 98
+    ApplicationBlocked_Pin2_Issued = 100
+    Uninstall_Pin_Issued = 101
+    Breakglass_Account_Issued = 102
+    AdminSession_Pin2_Issued = 103
+    LocalAdmin_Account_Revoked = 110
+    LocalAdmin_Group_Revoked = 111
+    LocalAdmin_Account_CancelRevoke = 112
+    LocalAdmin_Group_CancelRevoke = 113
+    LocalAdmin_Account_Restored = 114
+    LocalAdmin_Group_Restored = 115
+    LocalAdmin_Account_CancelRestore = 116
+    LocalAdmin_Group_CancelRestore = 117
+    DeviceOwner_Set = 120
+    DeviceOwner_Released = 121
+    DeviceOwner_Set_Admin = 122
+    AdminSession_Denied_NotOwner = 123
+    ExecutionBlocked_NotOwner = 124
+    AdminSession_Denied_NotIntuneCompliant = 130
+    ExecutionBlocked_NotIntuneCompliant = 131
+    RemoteDesktop_Account_Revoke = 140
+    RemoteDesktop_Group_Revoke = 141
+    RemoteDesktop_Account_CancelRevoke = 142
+    RemoteDesktop_Group_CancelRevoke = 143
+    RemoteDesktop_Account_Restore = 144
+    RemoteDesktop_Group_Restore = 145
+    RemoteDesktop_Account_CancelRestore = 146
+    RemoteDesktop_Group_CancelRestore = 147
+    User_Removed_RemoteDesktop = 150
+    Group_Removed_RemoteDesktop = 151
+    User_Restored_RemoteDesktop = 152
+    Group_Restored_RemoteDesktop = 153
+    LocalAdmin_Account_AdditionIssued = 160
+    LocalAdmin_Group_AdditionIssued = 161
+    LocalAdmin_Account_AdditionCancelled = 162
+    LocalAdmin_Group_AdditionCancelled = 163
+    RemoteDesktop_Account_AdditionIssued = 170
+    RemoteDesktop_Group_AdditionIssued = 171
+    RemoteDesktop_Account_AdditionCancelled = 172
+    RemoteDesktop_Group_AdditionCancelled = 173
+    RotatingAdmin_Account_Created = 180
+    RotatingAdmin_Account_Removed = 181
+    RotatingAdmin_Account_Login = 182
+     
 class ABRDatacenter(Enum):
     dc1 = 'dc1'
     dc2 = 'dc2'
@@ -973,25 +1167,317 @@ class AdminByRequest:
     
 # /request - Request API extension
     # Get all requests as JSON
+    def get_requests(self, limit: int=10000, offset: int=0):
+        url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset)
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        request = response.json()
+        request_obj = {}
+        count = 0
+        for item in request:
+            request_obj[count] = ABRRequestRequestsObject(
+                scanResults=item['scanResults'],
+                id=item['id'],
+                traceNo=item['traceNo'],
+                settingsName=item['settingsName'],
+                runType=item['type'],
+                typeCode=item['typeCode'],
+                status=item['status'],
+                statusCode=item['statusCode'],
+                application_file=item['application']['file'],
+                application_name=item['application']['name'],
+                application_vendor=item['application']['vendor'],
+                application_version=item['application']['version'],
+                application_sha256=item['application']['sha256'],
+                application_scanResult=item['application']['scanResult'],
+                application_scanResultCode=item['application']['scanResultCode'],
+                application_threat=item['application']['threat'],
+                application_virustotalLink=item['application']['virustotalLink'],
+                user_account=item['user']['account'],
+                user_fullname=item['user']['fullName'],
+                user_email=item['user']['email'],
+                user_phone=item['user']['phone'],
+                computer_name=item['computer']['name'],
+                computer_platform=item['computer']['platform'],
+                computer_platformCode=item['computer']['platformCode'],
+                computer_make=item['computer']['make'],
+                computer_model=item['computer']['model'],
+                reason=item['reason'],
+                approvedBy=item['approvedBy'],
+                approvedByEmail=item['approvedByEmail'],
+                deniedReason=item['deniedReason'],
+                deniedBy=item['deniedBy'],
+                deniedByEmail=item['deniedByEmail'],
+                requestTime=item['requestTime'],
+                auditlogLink=item['auditlogLink']
+            )
+            count += 1
+        return request_obj
     
     # Get request by ID as JSON
+    def get_request_id(self, id: int):
+        url = self.url + 'request/' + str(id)
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        request = response.json()
+        request_obj = ABRRequestRequestsObject(
+            scanResults=request['scanResults'],
+            id=request['id'],
+            traceNo=request['traceNo'],
+            settingsName=request['settingsName'],
+            runType=request['type'],
+            typeCode=request['typeCode'],
+            status=request['status'],
+            statusCode=request['statusCode'],
+            application_file=request['application']['file'],
+            application_name=request['application']['name'],
+            application_vendor=request['application']['vendor'],
+            application_version=request['application']['version'],
+            application_sha256=request['application']['sha256'],
+            application_scanResult=request['application']['scanResult'],
+            application_scanResultCode=request['application']['scanResultCode'],
+            application_threat=request['application']['threat'],
+            application_virustotalLink=request['application']['virustotalLink'],
+            user_account=request['user']['account'],
+            user_fullname=request['user']['fullName'],
+            user_email=request['user']['email'],
+            user_phone=request['user']['phone'],
+            computer_name=request['computer']['name'],
+            computer_platform=request['computer']['platform'],
+            computer_platformCode=request['computer']['platformCode'],
+            computer_make=request['computer']['make'],
+            computer_model=request['computer']['model'],
+            reason=request['reason'],
+            approvedBy=request['approvedBy'],
+            approvedByEmail=request['approvedByEmail'],
+            deniedReason=request['deniedReason'],
+            deniedBy=request['deniedBy'],
+            deniedByEmail=request['deniedByEmail'],
+            requestTime=request['requestTime'],
+            auditlogLink=request['auditlogLink']
+        )
+        return request_obj
     
     # Approve request by ID
+    def approve_request_id(self, id: int):
+        url = self.url + 'request/' + str(id)
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.put(url, headers=headers)
     
     # Deny request by ID
+    def deny_request_id(self, id: int):
+        url = self.url + 'request/' + str(id)
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.delete(url, headers=headers)
     
 # /events - Events API extension
     # Get all events as JSON
+    def get_events(self, limit: int=10000, offset: int=0):
+        url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset)
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        events = response.json()
+        event_obj = {}
+        count = 0
+        for item in events:
+            event_obj[count] = ABRRequestEventObjects(
+                id=item['id'],
+                eventCode=item['eventCode'],
+                eventLevel=item['eventLevel'],
+                eventText=item['eventText'],
+                eventTime=item['eventTime'],
+                eventTimeUTC=item['eventTimeUTC'],
+                computerName=item['computerName'],
+                userAccount=item['userAccount'],
+                userName=item['userName'],
+                alertAccount=item['alertAccount'],
+                auditLogURL=item['auditLogURL'],
+                rollback=item['rollback'],
+                additionalData=item['additionalData'],
+                application_file=item['application']['file'],
+                application_path=item['application']['path'],
+                application_name=item['application']['name'],
+                application_vendor=item['application']['vendor'],
+                application_version=item['application']['version'],
+                application_sha256=item['application']['sha256']
+            )
+            count += 1
+        return event_obj
     
     # Get event by ID as JSON
+    def get_events_id(self, id: int):
+        url = self.url + 'events/' + str(id)
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        events = response.json()
+        event_obj = ABRRequestEventObjects(
+            id=events['id'],
+            eventCode=events['eventCode'],
+            eventLevel=events['eventLevel'],
+            eventText=events['eventText'],
+            eventTime=events['eventTime'],
+            eventTimeUTC=events['eventTimeUTC'],
+            computerName=events['computerName'],
+            userAccount=events['userAccount'],
+            userName=events['userName'],
+            alertAccount=events['alertAccount'],
+            auditLogURL=events['auditLogURL'],
+            rollback=events['rollback'],
+            additionalData=events['additionalData'],
+            application_file=events['application']['file'],
+            application_path=events['application']['path'],
+            application_name=events['application']['name'],
+            application_vendor=events['application']['vendor'],
+            application_version=events['application']['version'],
+            application_sha256=events['application']['sha256']
+        )
+        return event_obj
     
     # Get all events of a certain computer, by computer name
+    def get_event_computer(self, computername: str):
+        url = self.url + 'computers/' + computername + "/events"
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        events = response.json()
+        event_obj = {}
+        count = 0
+        for item in events:
+            event_obj[count] = ABRRequestEventObjects(
+                id=item['id'],
+                eventCode=item['eventCode'],
+                eventLevel=item['eventLevel'],
+                eventText=item['eventText'],
+                eventTime=item['eventTime'],
+                eventTimeUTC=item['eventTimeUTC'],
+                computerName=item['computerName'],
+                userAccount=item['userAccount'],
+                userName=item['userName'],
+                alertAccount=item['alertAccount'],
+                auditLogURL=item['auditLogURL'],
+                rollback=item['rollback'],
+                additionalData=item['additionalData'],
+                application_file=item['application']['file'],
+                application_path=item['application']['path'],
+                application_name=item['application']['name'],
+                application_vendor=item['application']['vendor'],
+                application_version=item['application']['version'],
+                application_sha256=item['application']['sha256']
+            )
+            count += 1
+        return event_obj
     
     # Get all events of a certain user, by username
+    def get_events_user(self, username: str):
+        url = self.url + 'users/' + username + "/events"
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        events = response.json()
+        event_obj = {}
+        count = 0
+        for item in events:
+            event_obj[count] = ABRRequestEventObjects(
+                id=item['id'],
+                eventCode=item['eventCode'],
+                eventLevel=item['eventLevel'],
+                eventText=item['eventText'],
+                eventTime=item['eventTime'],
+                eventTimeUTC=item['eventTimeUTC'],
+                computerName=item['computerName'],
+                userAccount=item['userAccount'],
+                userName=item['userName'],
+                alertAccount=item['alertAccount'],
+                auditLogURL=item['auditLogURL'],
+                rollback=item['rollback'],
+                additionalData=item['additionalData'],
+                application_file=item['application']['file'],
+                application_path=item['application']['path'],
+                application_name=item['application']['name'],
+                application_vendor=item['application']['vendor'],
+                application_version=item['application']['version'],
+                application_sha256=item['application']['sha256']
+            )
+            count += 1
+        return event_obj
+     
+    # Get Errors by Code
+    def get_events_errorCode(self, limit: int = 10000, offset: int = 0, errorCode = ABREventCodes.Support_Assist_Initiated):
+        events = None
+        if errorCode not in ABREventCodes:
+            url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset) + '&code=' + str(errorCode)
+            headers = {
+                "apikey": self.api_key
+            }
+            response = requests.get(url, headers=headers)
+            events = response.json()
+        else:
+            errorCode: int = errorCode.value
+            url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset) + '&code=' + str(errorCode)
+            headers = {
+                "apikey": self.api_key
+            }
+            response = requests.get(url, headers=headers)
+            events = response.json()
+        event_obj = {}
+        count = 0
+        for item in events:
+            event_obj[count] = ABRRequestEventObjects(
+                id=item['id'],
+                eventCode=item['eventCode'], # This is Consistant because this only returns the same event.
+                eventLevel=item['eventLevel'],
+                eventText=item['eventText'],
+                eventTime=item['eventTime'],
+                eventTimeUTC=item['eventTimeUTC'],
+                computerName=item['computerName'],
+                userAccount=item['userAccount'],
+                userName=item['userName'],
+                alertAccount=item['alertAccount'],
+                auditLogURL=item['auditLogURL'],
+                rollback=item['rollback'],
+                additionalData=item['additionalData'],
+                application_file=item['application']['file'],
+                application_path=item['application']['path'],
+                application_name=item['application']['name'],
+                application_vendor=item['application']['vendor'],
+                application_version=item['application']['version'],
+                application_sha256=item['application']['sha256']
+            )
+            count += 1
+        return event_obj  
     
 # /pin - Pin Code API extension (Extension of the Invetory API)
     # Get pin code as String from the computer's Inventory by computer id
+    def get_pin_id(self, id: int):
+        url = self.url + 'inventory/' + str(id) + '/pin'
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        pin = response.json()
+        return pin
     
     # Get pin code as String from the computer's Inventory by computer name
+    def get_pin_computer(self, computername: str):
+        url = self.url + 'inventory/' + computername + '/pin'
+        headers = {
+            "apikey": self.api_key
+        }
+        response = requests.get(url, headers=headers)
+        pin = response.json()
+        return pin
     
-    # Get Pin Code 2 from Pin Code 1
