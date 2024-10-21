@@ -825,8 +825,8 @@ class AdminByRequest:
         inv_obj= ABRRequestInventoryObject(
             inventory['id'],
             inventory["name"],
-            inventory['inventoryDate'],
             inventory['inventoryAvailable'],
+            inventory['inventoryDate'],
             inventory['abrClientVersion'],
             inventory['abrClientInstallDate'],
             inventory['notes'],
@@ -907,8 +907,8 @@ class AdminByRequest:
         inv_obj= ABRRequestInventoryObject(
             inventory['id'],
             inventory['name'],
-            inventory['inventoryDate'],
             inventory['inventoryAvailable'],
+            inventory['inventoryDate'],
             inventory['abrClientVersion'],
             inventory['abrClientInstallDate'],
             inventory['notes'],
@@ -1017,8 +1017,8 @@ class AdminByRequest:
                     inv_obj[count] = ABRRequestInventoryObject(
                         item['id'],
                         item['name'],
-                        item['inventoryDate'],
                         item['inventoryAvailable'],
+                        item['inventoryDate'],
                         item['abrClientVersion'],
                         item['abrClientInstallDate'],
                         item['notes'],
@@ -1093,8 +1093,8 @@ class AdminByRequest:
                     inv_obj[count] = ABRRequestInventoryObject(
                         item['id'],
                         item['name'],
-                        item['inventoryDate'],
                         item['inventoryAvailable'],
+                        item['inventoryDate'],
                         item['abrClientVersion'],
                         item['abrClientInstallDate'],
                         item['notes'],
@@ -1168,7 +1168,7 @@ class AdminByRequest:
 # /request - Request API extension
     # Get all requests as JSON
     def get_requests(self, limit: int=10000, offset: int=0):
-        url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset)
+        url = self.url + 'requests?limit=' + str(limit) + '&offset=' + str(offset)
         headers = {
             "apikey": self.api_key
         }
@@ -1269,10 +1269,42 @@ class AdminByRequest:
             "apikey": self.api_key
         }
         requests.put(url, headers=headers)
+        
+    # Approve request by ID with approved by
+    def approve_request_id_approvedby(self, id: int, approvedby: str):
+        url = self.url + 'request/' + str(id) + '?approvedby=' + approvedby
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.put(url, headers=headers)
     
     # Deny request by ID
     def deny_request_id(self, id: int):
         url = self.url + 'request/' + str(id)
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.delete(url, headers=headers)
+        
+    # Deny Request by ID with denied by and reason
+    def deny_request_id_reason_deniedby(self, id: int, deniedby: str, reason: str):
+        url = self.url + 'request/' + str(id) + '?deniedby=' + deniedby + '&reason=' + reason
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.delete(url, headers=headers)
+        
+    # Deny Request by ID with denied by
+    def deny_request_id_deniedby(self, id: int, deniedby: str):
+        url = self.url + 'request/' + str(id) + '?deniedby=' + deniedby
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.delete(url, headers=headers)
+        
+    # Deny Request by ID with reason
+    def deny_request_id_reason(self, id: int, reason: str):
+        url = self.url + 'request/' + str(id) + '?reason=' + reason
         headers = {
             "apikey": self.api_key
         }
