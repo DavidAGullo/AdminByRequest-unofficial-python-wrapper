@@ -105,7 +105,7 @@ class ABRRequestInventoryObject:
         self, 
         id: int, 
         name, 
-        inventoryAvailable='', 
+        inventoryAvailable, 
         inventoryDate='', 
         clientVersion='', 
         clientInstall='', 
@@ -470,58 +470,65 @@ class AdminByRequest:
         auditlog = response.json()
         audit_obj = {}
         count = 0
-        for item in auditlog:
-            audit_obj[count] = ABRRequestAuditlogObject( 
-                installs=item['installs'],
-                uninstalls=item['uninstalls'],
-                elevatedApplications=item['elevatedApplications'],
-                scanResults=item['scanResults'],
-                id=item['id'],
-                traceNo=item['traceNo'],
-                settingsName=item['settingsName'],
-                runType=item['type'],
-                typeCode=item['typeCode'],
-                status=item['status'],
-                statusCode=item['statusCode'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256'],
-                application_scanResult=item['application']['scanResult'],
-                application_scanResultCode=item['application']['scanResultCode'],
-                application_threat=item['application']['threat'],
-                application_virustotalLink=item['application']['virustotalLink'],
-                application_preapproved=item['application']['preapproved'],
-                user_account=item['user']['account'],
-                user_fullname=item['user']['fullName'],
-                user_email=item['user']['email'],
-                user_phone=item['user']['phone'],
-                user_isAdmin=item['user']['isAdmin'],
-                computer_name=item['computer']['name'],
-                computer_platform=item['computer']['platform'],
-                computer_platformCode=item['computer']['platformCode'],
-                computer_make=item['computer']['make'],
-                computer_model=item['computer']['model'],
-                reason=item['reason'],
-                approvedBy=item['approvedBy'],
-                approvedByEmail=item['approvedByEmail'],
-                deniedReason=item['deniedReason'],
-                deniedBy=item['deniedBy'],
-                deniedByEmail=item['deniedByEmail'],
-                ssoValidate=item['ssoValidated'],
-                requestTime=item['requestTime'],
-                requestTimeUTC=item['requestTimeUTC'],
-                startTime=item['startTime'],
-                startTimeUTC=item['startTimeUTC'],
-                endTime=item['endTime'],
-                endTimeUTC=item['endTimeUTC'],
-                responseTime=item['responseTime'],
-                auditlogLink=item['auditlogLink']
-            )
-            count += 1
-        return audit_obj
+        
+        # Error Checking debugging issue with Users seeing issues when using the wrong Datacenter
+        try:
+            for item in auditlog:
+                audit_obj[count] = ABRRequestAuditlogObject( 
+                    installs=item['installs'],
+                    uninstalls=item['uninstalls'],
+                    elevatedApplications=item['elevatedApplications'],
+                    scanResults=item['scanResults'],
+                    id=item['id'],
+                    traceNo=item['traceNo'],
+                    settingsName=item['settingsName'],
+                    runType=item['type'],
+                    typeCode=item['typeCode'],
+                    status=item['status'],
+                    statusCode=item['statusCode'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256'],
+                    application_scanResult=item['application']['scanResult'],
+                    application_scanResultCode=item['application']['scanResultCode'],
+                    application_threat=item['application']['threat'],
+                    application_virustotalLink=item['application']['virustotalLink'],
+                    application_preapproved=item['application']['preapproved'],
+                    user_account=item['user']['account'],
+                    user_fullname=item['user']['fullName'],
+                    user_email=item['user']['email'],
+                    user_phone=item['user']['phone'],
+                    user_isAdmin=item['user']['isAdmin'],
+                    computer_name=item['computer']['name'],
+                    computer_platform=item['computer']['platform'],
+                    computer_platformCode=item['computer']['platformCode'],
+                    computer_make=item['computer']['make'],
+                    computer_model=item['computer']['model'],
+                    reason=item['reason'],
+                    approvedBy=item['approvedBy'],
+                    approvedByEmail=item['approvedByEmail'],
+                    deniedReason=item['deniedReason'],
+                    deniedBy=item['deniedBy'],
+                    deniedByEmail=item['deniedByEmail'],
+                    ssoValidate=item['ssoValidated'],
+                    requestTime=item['requestTime'],
+                    requestTimeUTC=item['requestTimeUTC'],
+                    startTime=item['startTime'],
+                    startTimeUTC=item['startTimeUTC'],
+                    endTime=item['endTime'],
+                    endTimeUTC=item['endTimeUTC'],
+                    responseTime=item['responseTime'],
+                    auditlogLink=item['auditlogLink']
+                )
+                count += 1
+            return audit_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if auditlog['Message'] == 'Invalid API key':
+                print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by ID as JSON
     def get_auditlog_id(self, id: int):
@@ -531,56 +538,61 @@ class AdminByRequest:
         }
         response = requests.get(url, headers=headers)
         auditlog = response.json()
-        audit_obj = ABRRequestAuditlogObject( 
-            installs=auditlog['installs'],
-            uninstalls=auditlog['uninstalls'],
-            elevatedApplications=auditlog['elevatedApplications'],
-            scanResults=auditlog['scanResults'],
-            id=auditlog['id'],
-            traceNo=auditlog['traceNo'],
-            settingsName=auditlog['settingsName'],
-            runType=auditlog['type'],
-            typeCode=auditlog['typeCode'],
-            status=auditlog['status'],
-            statusCode=auditlog['statusCode'],
-            application_file=auditlog['application']['file'],
-            application_path=auditlog['application']['path'],
-            application_name=auditlog['application']['name'],
-            application_vendor=auditlog['application']['vendor'],
-            application_version=auditlog['application']['version'],
-            application_sha256=auditlog['application']['sha256'],
-            application_scanResult=auditlog['application']['scanResult'],
-            application_scanResultCode=auditlog['application']['scanResultCode'],
-            application_threat=auditlog['application']['threat'],
-            application_virustotalLink=auditlog['application']['virustotalLink'],
-            application_preapproved=auditlog['application']['preapproved'],
-            user_account=auditlog['user']['account'],
-            user_fullname=auditlog['user']['fullName'],
-            user_email=auditlog['user']['email'],
-            user_phone=auditlog['user']['phone'],
-            user_isAdmin=auditlog['user']['isAdmin'],
-            computer_name=auditlog['computer']['name'],
-            computer_platform=auditlog['computer']['platform'],
-            computer_platformCode=auditlog['computer']['platformCode'],
-            computer_make=auditlog['computer']['make'],
-            computer_model=auditlog['computer']['model'],
-            reason=auditlog['reason'],
-            approvedBy=auditlog['approvedBy'],
-            approvedByEmail=auditlog['approvedByEmail'],
-            deniedReason=auditlog['deniedReason'],
-            deniedBy=auditlog['deniedBy'],
-            deniedByEmail=auditlog['deniedByEmail'],
-            ssoValidate=auditlog['ssoValidated'],
-            requestTime=auditlog['requestTime'],
-            requestTimeUTC=auditlog['requestTimeUTC'],
-            startTime=auditlog['startTime'],
-            startTimeUTC=auditlog['startTimeUTC'],
-            endTime=auditlog['endTime'],
-            endTimeUTC=auditlog['endTimeUTC'],
-            responseTime=auditlog['responseTime'],
-            auditlogLink=auditlog['auditlogLink']
-        )
-        return audit_obj
+        try:
+            audit_obj = ABRRequestAuditlogObject( 
+                installs=auditlog['installs'],
+                uninstalls=auditlog['uninstalls'],
+                elevatedApplications=auditlog['elevatedApplications'],
+                scanResults=auditlog['scanResults'],
+                id=auditlog['id'],
+                traceNo=auditlog['traceNo'],
+                settingsName=auditlog['settingsName'],
+                runType=auditlog['type'],
+                typeCode=auditlog['typeCode'],
+                status=auditlog['status'],
+                statusCode=auditlog['statusCode'],
+                application_file=auditlog['application']['file'],
+                application_path=auditlog['application']['path'],
+                application_name=auditlog['application']['name'],
+                application_vendor=auditlog['application']['vendor'],
+                application_version=auditlog['application']['version'],
+                application_sha256=auditlog['application']['sha256'],
+                application_scanResult=auditlog['application']['scanResult'],
+                application_scanResultCode=auditlog['application']['scanResultCode'],
+                application_threat=auditlog['application']['threat'],
+                application_virustotalLink=auditlog['application']['virustotalLink'],
+                application_preapproved=auditlog['application']['preapproved'],
+                user_account=auditlog['user']['account'],
+                user_fullname=auditlog['user']['fullName'],
+                user_email=auditlog['user']['email'],
+                user_phone=auditlog['user']['phone'],
+                user_isAdmin=auditlog['user']['isAdmin'],
+                computer_name=auditlog['computer']['name'],
+                computer_platform=auditlog['computer']['platform'],
+                computer_platformCode=auditlog['computer']['platformCode'],
+                computer_make=auditlog['computer']['make'],
+                computer_model=auditlog['computer']['model'],
+                reason=auditlog['reason'],
+                approvedBy=auditlog['approvedBy'],
+                approvedByEmail=auditlog['approvedByEmail'],
+                deniedReason=auditlog['deniedReason'],
+                deniedBy=auditlog['deniedBy'],
+                deniedByEmail=auditlog['deniedByEmail'],
+                ssoValidate=auditlog['ssoValidated'],
+                requestTime=auditlog['requestTime'],
+                requestTimeUTC=auditlog['requestTimeUTC'],
+                startTime=auditlog['startTime'],
+                startTimeUTC=auditlog['startTimeUTC'],
+                endTime=auditlog['endTime'],
+                endTimeUTC=auditlog['endTimeUTC'],
+                responseTime=auditlog['responseTime'],
+                auditlogLink=auditlog['auditlogLink']
+            )
+            return audit_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if auditlog['Message'] == 'Invalid API key':
+                print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by computer as JSON
     def get_auditlog_computer(self, computername: str):
@@ -592,58 +604,63 @@ class AdminByRequest:
         auditlog = response.json()
         audit_obj = {}
         count = 0
-        for item in auditlog:
-            audit_obj[count] = ABRRequestAuditlogObject( 
-                installs=item['installs'],
-                uninstalls=item['uninstalls'],
-                elevatedApplications=item['elevatedApplications'],
-                scanResults=item['scanResults'],
-                id=item['id'],
-                traceNo=item['traceNo'],
-                settingsName=item['settingsName'],
-                runType=item['type'],
-                typeCode=item['typeCode'],
-                status=item['status'],
-                statusCode=item['statusCode'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256'],
-                application_scanResult=item['application']['scanResult'],
-                application_scanResultCode=item['application']['scanResultCode'],
-                application_threat=item['application']['threat'],
-                application_virustotalLink=item['application']['virustotalLink'],
-                application_preapproved=item['application']['preapproved'],
-                user_account=item['user']['account'],
-                user_fullname=item['user']['fullName'],
-                user_email=item['user']['email'],
-                user_phone=item['user']['phone'],
-                user_isAdmin=item['user']['isAdmin'],
-                computer_name=item['computer']['name'],
-                computer_platform=item['computer']['platform'],
-                computer_platformCode=item['computer']['platformCode'],
-                computer_make=item['computer']['make'],
-                computer_model=item['computer']['model'],
-                reason=item['reason'],
-                approvedBy=item['approvedBy'],
-                approvedByEmail=item['approvedByEmail'],
-                deniedReason=item['deniedReason'],
-                deniedBy=item['deniedBy'],
-                deniedByEmail=item['deniedByEmail'],
-                ssoValidate=item['ssoValidated'],
-                requestTime=item['requestTime'],
-                requestTimeUTC=item['requestTimeUTC'],
-                startTime=item['startTime'],
-                startTimeUTC=item['startTimeUTC'],
-                endTime=item['endTime'],
-                endTimeUTC=item['endTimeUTC'],
-                responseTime=item['responseTime'],
-                auditlogLink=item['auditlogLink']
-            )
-            count += 1
-        return audit_obj
+        try:
+            for item in auditlog:
+                audit_obj[count] = ABRRequestAuditlogObject( 
+                    installs=item['installs'],
+                    uninstalls=item['uninstalls'],
+                    elevatedApplications=item['elevatedApplications'],
+                    scanResults=item['scanResults'],
+                    id=item['id'],
+                    traceNo=item['traceNo'],
+                    settingsName=item['settingsName'],
+                    runType=item['type'],
+                    typeCode=item['typeCode'],
+                    status=item['status'],
+                    statusCode=item['statusCode'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256'],
+                    application_scanResult=item['application']['scanResult'],
+                    application_scanResultCode=item['application']['scanResultCode'],
+                    application_threat=item['application']['threat'],
+                    application_virustotalLink=item['application']['virustotalLink'],
+                    application_preapproved=item['application']['preapproved'],
+                    user_account=item['user']['account'],
+                    user_fullname=item['user']['fullName'],
+                    user_email=item['user']['email'],
+                    user_phone=item['user']['phone'],
+                    user_isAdmin=item['user']['isAdmin'],
+                    computer_name=item['computer']['name'],
+                    computer_platform=item['computer']['platform'],
+                    computer_platformCode=item['computer']['platformCode'],
+                    computer_make=item['computer']['make'],
+                    computer_model=item['computer']['model'],
+                    reason=item['reason'],
+                    approvedBy=item['approvedBy'],
+                    approvedByEmail=item['approvedByEmail'],
+                    deniedReason=item['deniedReason'],
+                    deniedBy=item['deniedBy'],
+                    deniedByEmail=item['deniedByEmail'],
+                    ssoValidate=item['ssoValidated'],
+                    requestTime=item['requestTime'],
+                    requestTimeUTC=item['requestTimeUTC'],
+                    startTime=item['startTime'],
+                    startTimeUTC=item['startTimeUTC'],
+                    endTime=item['endTime'],
+                    endTimeUTC=item['endTimeUTC'],
+                    responseTime=item['responseTime'],
+                    auditlogLink=item['auditlogLink']
+                )
+                count += 1
+            return audit_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if auditlog['Message'] == 'Invalid API key':
+                print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by user as JSON
     def get_auditlog_username(self, username: str):
@@ -655,58 +672,64 @@ class AdminByRequest:
         auditlog = response.json()
         audit_obj = {}
         count = 0
-        for item in auditlog:
-            audit_obj[count] = ABRRequestAuditlogObject( 
-                installs=item['installs'],
-                uninstalls=item['uninstalls'],
-                elevatedApplications=item['elevatedApplications'],
-                scanResults=item['scanResults'],
-                id=item['id'],
-                traceNo=item['traceNo'],
-                settingsName=item['settingsName'],
-                runType=item['type'],
-                typeCode=item['typeCode'],
-                status=item['status'],
-                statusCode=item['statusCode'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256'],
-                application_scanResult=item['application']['scanResult'],
-                application_scanResultCode=item['application']['scanResultCode'],
-                application_threat=item['application']['threat'],
-                application_virustotalLink=item['application']['virustotalLink'],
-                application_preapproved=item['application']['preapproved'],
-                user_account=item['user']['account'],
-                user_fullname=item['user']['fullName'],
-                user_email=item['user']['email'],
-                user_phone=item['user']['phone'],
-                user_isAdmin=item['user']['isAdmin'],
-                computer_name=item['computer']['name'],
-                computer_platform=item['computer']['platform'],
-                computer_platformCode=item['computer']['platformCode'],
-                computer_make=item['computer']['make'],
-                computer_model=item['computer']['model'],
-                reason=item['reason'],
-                approvedBy=item['approvedBy'],
-                approvedByEmail=item['approvedByEmail'],
-                deniedReason=item['deniedReason'],
-                deniedBy=item['deniedBy'],
-                deniedByEmail=item['deniedByEmail'],
-                ssoValidate=item['ssoValidated'],
-                requestTime=item['requestTime'],
-                requestTimeUTC=item['requestTimeUTC'],
-                startTime=item['startTime'],
-                startTimeUTC=item['startTimeUTC'],
-                endTime=item['endTime'],
-                endTimeUTC=item['endTimeUTC'],
-                responseTime=item['responseTime'],
-                auditlogLink=item['auditlogLink']
-            )
-            count += 1
-        return audit_obj
+        
+        try:
+            for item in auditlog:
+                audit_obj[count] = ABRRequestAuditlogObject( 
+                    installs=item['installs'],
+                    uninstalls=item['uninstalls'],
+                    elevatedApplications=item['elevatedApplications'],
+                    scanResults=item['scanResults'],
+                    id=item['id'],
+                    traceNo=item['traceNo'],
+                    settingsName=item['settingsName'],
+                    runType=item['type'],
+                    typeCode=item['typeCode'],
+                    status=item['status'],
+                    statusCode=item['statusCode'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256'],
+                    application_scanResult=item['application']['scanResult'],
+                    application_scanResultCode=item['application']['scanResultCode'],
+                    application_threat=item['application']['threat'],
+                    application_virustotalLink=item['application']['virustotalLink'],
+                    application_preapproved=item['application']['preapproved'],
+                    user_account=item['user']['account'],
+                    user_fullname=item['user']['fullName'],
+                    user_email=item['user']['email'],
+                    user_phone=item['user']['phone'],
+                    user_isAdmin=item['user']['isAdmin'],
+                    computer_name=item['computer']['name'],
+                    computer_platform=item['computer']['platform'],
+                    computer_platformCode=item['computer']['platformCode'],
+                    computer_make=item['computer']['make'],
+                    computer_model=item['computer']['model'],
+                    reason=item['reason'],
+                    approvedBy=item['approvedBy'],
+                    approvedByEmail=item['approvedByEmail'],
+                    deniedReason=item['deniedReason'],
+                    deniedBy=item['deniedBy'],
+                    deniedByEmail=item['deniedByEmail'],
+                    ssoValidate=item['ssoValidated'],
+                    requestTime=item['requestTime'],
+                    requestTimeUTC=item['requestTimeUTC'],
+                    startTime=item['startTime'],
+                    startTimeUTC=item['startTimeUTC'],
+                    endTime=item['endTime'],
+                    endTimeUTC=item['endTimeUTC'],
+                    responseTime=item['responseTime'],
+                    auditlogLink=item['auditlogLink']
+                )
+                count += 1
+            return audit_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if auditlog['Message'] == 'Invalid API key':
+                print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get the timeNow Value which will be used to calculate until the next delta [This number increases by second]
     def get_auditlogs_delta(self, fullLog: bool=False):
@@ -737,82 +760,89 @@ class AdminByRequest:
         inventory = response.json()
         inv_obj = {}
         count = 0
-        for item in inventory:
-            if item['inventoryAvailable']:
-                inv_obj[count] = ABRRequestInventoryObject(
-                    item['id'],
-                    item["name"],
-                    item['inventoryAvailable'],
-                    item['inventoryDate'],
-                    item['abrClientVersion'],
-                    item['abrClientInstallDate'],
-                    item['notes'],
-                    item['user']['account'],
-                    item['user']['fullName'],
-                    item['user']['email'],
-                    item['user']['phone'],
-                    item['user']['isAdmin'],
-                    item['user']['domain'],
-                    item['user']['isDomainJoined'],
-                    item['user']['isAzureJoined'],
-                    item['user']['orgUnit'],
-                    item['user']['orgUnitPath'],
-                    item['user']['groups'],
-                    item['owner']['account'],
-                    item['owner']['fullName'],
-                    item['computer']['domain'],
-                    item['computer']['isDomainJoined'],
-                    item['computer']['isAzureJoined'],
-                    item['computer']['orgUnit'],
-                    item['computer']['orgUnitPath'],
-                    item['computer']['groups'],
-                    item['computer']['localAdmins'],
-                    item['computer']['users'],
-                    item['operatingSystem']['platform'],
-                    item['operatingSystem']['platformCode'],
-                    item['operatingSystem']['name'],
-                    item['operatingSystem']['version'],
-                    item['operatingSystem']['release'],
-                    item['operatingSystem']['build'],
-                    item['operatingSystem']['buildUpdate'],
-                    item['operatingSystem']['type'],
-                    item['operatingSystem']['typeCode'],
-                    item['operatingSystem']['bits'],
-                    item['operatingSystem']['installDate'],
-                    item['hardware']['make'],
-                    item['hardware']['model'],
-                    item['hardware']['type'],
-                    item['hardware']['typeCode'],
-                    item['hardware']['serviceTag'],
-                    item['hardware']['cpu'],
-                    item['hardware']['cpuSpeed'],
-                    item['hardware']['cpuCores'],
-                    item['hardware']['diskSize'],
-                    item['hardware']['diskFree'],
-                    item['hardware']['diskStatus'],
-                    item['hardware']['memory'],
-                    item['hardware']['noMonitors'],
-                    item['hardware']['monitorResolution'],
-                    item['hardware']['bitlockerEnabled'],
-                    item['hardware']['isCompliant'],
-                    item['hardware']['tpmEnabled'],
-                    item['hardware']['tpmVersion'],
-                    item['network']['publicIP'],
-                    item['network']['privateIP'],
-                    item['network']['macAddress'],
-                    item['network']['nicSpeed'],
-                    item['network']['hostName'],
-                    item['location']['city'],
-                    item['location']['region'],
-                    item['location']['country'],
-                    item['location']['latitude'],
-                    item['location']['longitude'],
-                    item['location']['googleMapsLink'],
-                    item['location']['hourOffset'],
-                    item['software']
-                )
-                count += 1
-        return inv_obj
+        
+        # Error Checking debugging issue with Users seeing issues when using the wrong Datacenter
+        try:
+            for item in inventory:
+                if item['inventoryAvailable']:
+                    inv_obj[count] = ABRRequestInventoryObject(
+                        item['id'],
+                        item["name"],
+                        item['inventoryAvailable'],
+                        item['inventoryDate'],
+                        item['abrClientVersion'],
+                        item['abrClientInstallDate'],
+                        item['notes'],
+                        item['user']['account'],
+                        item['user']['fullName'],
+                        item['user']['email'],
+                        item['user']['phone'],
+                        item['user']['isAdmin'],
+                        item['user']['domain'],
+                        item['user']['isDomainJoined'],
+                        item['user']['isAzureJoined'],
+                        item['user']['orgUnit'],
+                        item['user']['orgUnitPath'],
+                        item['user']['groups'],
+                        item['owner']['account'],
+                        item['owner']['fullName'],
+                        item['computer']['domain'],
+                        item['computer']['isDomainJoined'],
+                        item['computer']['isAzureJoined'],
+                        item['computer']['orgUnit'],
+                        item['computer']['orgUnitPath'],
+                        item['computer']['groups'],
+                        item['computer']['localAdmins'],
+                        item['computer']['users'],
+                        item['operatingSystem']['platform'],
+                        item['operatingSystem']['platformCode'],
+                        item['operatingSystem']['name'],
+                        item['operatingSystem']['version'],
+                        item['operatingSystem']['release'],
+                        item['operatingSystem']['build'],
+                        item['operatingSystem']['buildUpdate'],
+                        item['operatingSystem']['type'],
+                        item['operatingSystem']['typeCode'],
+                        item['operatingSystem']['bits'],
+                        item['operatingSystem']['installDate'],
+                        item['hardware']['make'],
+                        item['hardware']['model'],
+                        item['hardware']['type'],
+                        item['hardware']['typeCode'],
+                        item['hardware']['serviceTag'],
+                        item['hardware']['cpu'],
+                        item['hardware']['cpuSpeed'],
+                        item['hardware']['cpuCores'],
+                        item['hardware']['diskSize'],
+                        item['hardware']['diskFree'],
+                        item['hardware']['diskStatus'],
+                        item['hardware']['memory'],
+                        item['hardware']['noMonitors'],
+                        item['hardware']['monitorResolution'],
+                        item['hardware']['bitlockerEnabled'],
+                        item['hardware']['isCompliant'],
+                        item['hardware']['tpmEnabled'],
+                        item['hardware']['tpmVersion'],
+                        item['network']['publicIP'],
+                        item['network']['privateIP'],
+                        item['network']['macAddress'],
+                        item['network']['nicSpeed'],
+                        item['network']['hostName'],
+                        item['location']['city'],
+                        item['location']['region'],
+                        item['location']['country'],
+                        item['location']['latitude'],
+                        item['location']['longitude'],
+                        item['location']['googleMapsLink'],
+                        item['location']['hourOffset'],
+                        item['software']
+                    )
+                    count += 1
+            return inv_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if inventory['Message'] == 'Invalid API key':
+                print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get inventory item by ID as JSON
     def get_inventory_id(self, id: int):
@@ -822,80 +852,86 @@ class AdminByRequest:
         }
         response = requests.get(url, headers=headers)
         inventory = response.json()
-        inv_obj= ABRRequestInventoryObject(
-            inventory['id'],
-            inventory["name"],
-            inventory['inventoryAvailable'],
-            inventory['inventoryDate'],
-            inventory['abrClientVersion'],
-            inventory['abrClientInstallDate'],
-            inventory['notes'],
-            inventory['user']['account'],
-            inventory['user']['fullName'],
-            inventory['user']['email'],
-            inventory['user']['phone'],
-            inventory['user']['isAdmin'],
-            inventory['user']['domain'],
-            inventory['user']['isDomainJoined'],
-            inventory['user']['isAzureJoined'],
-            inventory['user']['orgUnit'],
-            inventory['user']['orgUnitPath'],
-            inventory['user']['groups'],
-            inventory['owner']['account'],
-            inventory['owner']['fullName'],
-            inventory['computer']['domain'],
-            inventory['computer']['isDomainJoined'],
-            inventory['computer']['isAzureJoined'],
-            inventory['computer']['orgUnit'],
-            inventory['computer']['orgUnitPath'],
-            inventory['computer']['groups'],
-            inventory['computer']['localAdmins'],
-            inventory['computer']['users'],
-            inventory['operatingSystem']['platform'],
-            inventory['operatingSystem']['platformCode'],
-            inventory['operatingSystem']['name'],
-            inventory['operatingSystem']['version'],
-            inventory['operatingSystem']['release'],
-            inventory['operatingSystem']['build'],
-            inventory['operatingSystem']['buildUpdate'],
-            inventory['operatingSystem']['type'],
-            inventory['operatingSystem']['typeCode'],
-            inventory['operatingSystem']['bits'],
-            inventory['operatingSystem']['installDate'],
-            inventory['hardware']['make'],
-            inventory['hardware']['model'],
-            inventory['hardware']['type'],
-            inventory['hardware']['typeCode'],
-            inventory['hardware']['serviceTag'],
-            inventory['hardware']['cpu'],
-            inventory['hardware']['cpuSpeed'],
-            inventory['hardware']['cpuCores'],
-            inventory['hardware']['diskSize'],
-            inventory['hardware']['diskFree'],
-            inventory['hardware']['diskStatus'],
-            inventory['hardware']['memory'],
-            inventory['hardware']['noMonitors'],
-            inventory['hardware']['monitorResolution'],
-            inventory['hardware']['bitlockerEnabled'],
-            inventory['hardware']['isCompliant'],
-            inventory['hardware']['tpmEnabled'],
-            inventory['hardware']['tpmVersion'],
-            inventory['network']['publicIP'],
-            inventory['network']['privateIP'],
-            inventory['network']['macAddress'],
-            inventory['network']['nicSpeed'],
-            inventory['network']['hostName'],
-            inventory['location']['city'],
-            inventory['location']['region'],
-            inventory['location']['country'],
-            inventory['location']['latitude'],
-            inventory['location']['longitude'],
-            inventory['location']['googleMapsLink'],
-            inventory['location']['hourOffset'],
-            inventory['software']
-        )
-        return inv_obj
-    
+        
+        try:
+            inv_obj= ABRRequestInventoryObject(
+                inventory['id'],
+                inventory["name"],
+                inventory['inventoryAvailable'],
+                inventory['inventoryDate'],
+                inventory['abrClientVersion'],
+                inventory['abrClientInstallDate'],
+                inventory['notes'],
+                inventory['user']['account'],
+                inventory['user']['fullName'],
+                inventory['user']['email'],
+                inventory['user']['phone'],
+                inventory['user']['isAdmin'],
+                inventory['user']['domain'],
+                inventory['user']['isDomainJoined'],
+                inventory['user']['isAzureJoined'],
+                inventory['user']['orgUnit'],
+                inventory['user']['orgUnitPath'],
+                inventory['user']['groups'],
+                inventory['owner']['account'],
+                inventory['owner']['fullName'],
+                inventory['computer']['domain'],
+                inventory['computer']['isDomainJoined'],
+                inventory['computer']['isAzureJoined'],
+                inventory['computer']['orgUnit'],
+                inventory['computer']['orgUnitPath'],
+                inventory['computer']['groups'],
+                inventory['computer']['localAdmins'],
+                inventory['computer']['users'],
+                inventory['operatingSystem']['platform'],
+                inventory['operatingSystem']['platformCode'],
+                inventory['operatingSystem']['name'],
+                inventory['operatingSystem']['version'],
+                inventory['operatingSystem']['release'],
+                inventory['operatingSystem']['build'],
+                inventory['operatingSystem']['buildUpdate'],
+                inventory['operatingSystem']['type'],
+                inventory['operatingSystem']['typeCode'],
+                inventory['operatingSystem']['bits'],
+                inventory['operatingSystem']['installDate'],
+                inventory['hardware']['make'],
+                inventory['hardware']['model'],
+                inventory['hardware']['type'],
+                inventory['hardware']['typeCode'],
+                inventory['hardware']['serviceTag'],
+                inventory['hardware']['cpu'],
+                inventory['hardware']['cpuSpeed'],
+                inventory['hardware']['cpuCores'],
+                inventory['hardware']['diskSize'],
+                inventory['hardware']['diskFree'],
+                inventory['hardware']['diskStatus'],
+                inventory['hardware']['memory'],
+                inventory['hardware']['noMonitors'],
+                inventory['hardware']['monitorResolution'],
+                inventory['hardware']['bitlockerEnabled'],
+                inventory['hardware']['isCompliant'],
+                inventory['hardware']['tpmEnabled'],
+                inventory['hardware']['tpmVersion'],
+                inventory['network']['publicIP'],
+                inventory['network']['privateIP'],
+                inventory['network']['macAddress'],
+                inventory['network']['nicSpeed'],
+                inventory['network']['hostName'],
+                inventory['location']['city'],
+                inventory['location']['region'],
+                inventory['location']['country'],
+                inventory['location']['latitude'],
+                inventory['location']['longitude'],
+                inventory['location']['googleMapsLink'],
+                inventory['location']['hourOffset'],
+                inventory['software']
+            )
+            return inv_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if inventory['Message'] == 'Invalid API key':
+                print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
+        
     # Get inventory item by computer as JSON
     def get_inventory_computer(self, computername: str):
         url = self.url + "/inventory/" + computername
@@ -904,79 +940,85 @@ class AdminByRequest:
         }
         response = requests.get(url, headers=headers)
         inventory = response.json()
-        inv_obj= ABRRequestInventoryObject(
-            inventory['id'],
-            inventory['name'],
-            inventory['inventoryAvailable'],
-            inventory['inventoryDate'],
-            inventory['abrClientVersion'],
-            inventory['abrClientInstallDate'],
-            inventory['notes'],
-            inventory['user']['account'],
-            inventory['user']['fullName'],
-            inventory['user']['email'],
-            inventory['user']['phone'],
-            inventory['user']['isAdmin'],
-            inventory['user']['domain'],
-            inventory['user']['isDomainJoined'],
-            inventory['user']['isAzureJoined'],
-            inventory['user']['orgUnit'],
-            inventory['user']['orgUnitPath'],
-            inventory['user']['groups'],
-            inventory['owner']['account'],
-            inventory['owner']['fullName'],
-            inventory['computer']['domain'],
-            inventory['computer']['isDomainJoined'],
-            inventory['computer']['isAzureJoined'],
-            inventory['computer']['orgUnit'],
-            inventory['computer']['orgUnitPath'],
-            inventory['computer']['groups'],
-            inventory['computer']['localAdmins'],
-            inventory['computer']['users'],
-            inventory['operatingSystem']['platform'],
-            inventory['operatingSystem']['platformCode'],
-            inventory['operatingSystem']['name'],
-            inventory['operatingSystem']['version'],
-            inventory['operatingSystem']['release'],
-            inventory['operatingSystem']['build'],
-            inventory['operatingSystem']['buildUpdate'],
-            inventory['operatingSystem']['type'],
-            inventory['operatingSystem']['typeCode'],
-            inventory['operatingSystem']['bits'],
-            inventory['operatingSystem']['installDate'],
-            inventory['hardware']['make'],
-            inventory['hardware']['model'],
-            inventory['hardware']['type'],
-            inventory['hardware']['typeCode'],
-            inventory['hardware']['serviceTag'],
-            inventory['hardware']['cpu'],
-            inventory['hardware']['cpuSpeed'],
-            inventory['hardware']['cpuCores'],
-            inventory['hardware']['diskSize'],
-            inventory['hardware']['diskFree'],
-            inventory['hardware']['diskStatus'],
-            inventory['hardware']['memory'],
-            inventory['hardware']['noMonitors'],
-            inventory['hardware']['monitorResolution'],
-            inventory['hardware']['bitlockerEnabled'],
-            inventory['hardware']['isCompliant'],
-            inventory['hardware']['tpmEnabled'],
-            inventory['hardware']['tpmVersion'],
-            inventory['network']['publicIP'],
-            inventory['network']['privateIP'],
-            inventory['network']['macAddress'],
-            inventory['network']['nicSpeed'],
-            inventory['network']['hostName'],
-            inventory['location']['city'],
-            inventory['location']['region'],
-            inventory['location']['country'],
-            inventory['location']['latitude'],
-            inventory['location']['longitude'],
-            inventory['location']['googleMapsLink'],
-            inventory['location']['hourOffset'],
-            inventory['software']
-        )
-        return inv_obj
+        
+        try:
+            inv_obj= ABRRequestInventoryObject(
+                inventory['id'],
+                inventory['name'],
+                inventory['inventoryAvailable'],
+                inventory['inventoryDate'],
+                inventory['abrClientVersion'],
+                inventory['abrClientInstallDate'],
+                inventory['notes'],
+                inventory['user']['account'],
+                inventory['user']['fullName'],
+                inventory['user']['email'],
+                inventory['user']['phone'],
+                inventory['user']['isAdmin'],
+                inventory['user']['domain'],
+                inventory['user']['isDomainJoined'],
+                inventory['user']['isAzureJoined'],
+                inventory['user']['orgUnit'],
+                inventory['user']['orgUnitPath'],
+                inventory['user']['groups'],
+                inventory['owner']['account'],
+                inventory['owner']['fullName'],
+                inventory['computer']['domain'],
+                inventory['computer']['isDomainJoined'],
+                inventory['computer']['isAzureJoined'],
+                inventory['computer']['orgUnit'],
+                inventory['computer']['orgUnitPath'],
+                inventory['computer']['groups'],
+                inventory['computer']['localAdmins'],
+                inventory['computer']['users'],
+                inventory['operatingSystem']['platform'],
+                inventory['operatingSystem']['platformCode'],
+                inventory['operatingSystem']['name'],
+                inventory['operatingSystem']['version'],
+                inventory['operatingSystem']['release'],
+                inventory['operatingSystem']['build'],
+                inventory['operatingSystem']['buildUpdate'],
+                inventory['operatingSystem']['type'],
+                inventory['operatingSystem']['typeCode'],
+                inventory['operatingSystem']['bits'],
+                inventory['operatingSystem']['installDate'],
+                inventory['hardware']['make'],
+                inventory['hardware']['model'],
+                inventory['hardware']['type'],
+                inventory['hardware']['typeCode'],
+                inventory['hardware']['serviceTag'],
+                inventory['hardware']['cpu'],
+                inventory['hardware']['cpuSpeed'],
+                inventory['hardware']['cpuCores'],
+                inventory['hardware']['diskSize'],
+                inventory['hardware']['diskFree'],
+                inventory['hardware']['diskStatus'],
+                inventory['hardware']['memory'],
+                inventory['hardware']['noMonitors'],
+                inventory['hardware']['monitorResolution'],
+                inventory['hardware']['bitlockerEnabled'],
+                inventory['hardware']['isCompliant'],
+                inventory['hardware']['tpmEnabled'],
+                inventory['hardware']['tpmVersion'],
+                inventory['network']['publicIP'],
+                inventory['network']['privateIP'],
+                inventory['network']['macAddress'],
+                inventory['network']['nicSpeed'],
+                inventory['network']['hostName'],
+                inventory['location']['city'],
+                inventory['location']['region'],
+                inventory['location']['country'],
+                inventory['location']['latitude'],
+                inventory['location']['longitude'],
+                inventory['location']['googleMapsLink'],
+                inventory['location']['hourOffset'],
+                inventory['software']
+            )
+            return inv_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if inventory['Message'] == 'Invalid API key':
+                print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
         
     # Delete Inventory by ID
     def delete_inventory_id(self, id: int):
@@ -1010,160 +1052,166 @@ class AdminByRequest:
         inventory = response.json()
         inv_obj = {}
         count = 0
-        # Filter inventory items by availability and date in a single pass
-        if unavailable:
-            for item in inventory:
-                if not item['inventoryAvailable'] or (item['inventoryAvailable'] and item['inventoryDate'] < days):
-                    inv_obj[count] = ABRRequestInventoryObject(
-                        item['id'],
-                        item['name'],
-                        item['inventoryAvailable'],
-                        item['inventoryDate'],
-                        item['abrClientVersion'],
-                        item['abrClientInstallDate'],
-                        item['notes'],
-                        item['user']['account'],
-                        item['user']['fullName'],
-                        item['user']['email'],
-                        item['user']['phone'],
-                        item['user']['isAdmin'],
-                        item['user']['domain'],
-                        item['user']['isDomainJoined'],
-                        item['user']['isAzureJoined'],
-                        item['user']['orgUnit'],
-                        item['user']['orgUnitPath'],
-                        item['user']['groups'],
-                        item['owner']['account'],
-                        item['owner']['fullName'],
-                        item['computer']['domain'],
-                        item['computer']['isDomainJoined'],
-                        item['computer']['isAzureJoined'],
-                        item['computer']['orgUnit'],
-                        item['computer']['orgUnitPath'],
-                        item['computer']['groups'],
-                        item['computer']['localAdmins'],
-                        item['computer']['users'],
-                        item['operatingSystem']['platform'],
-                        item['operatingSystem']['platformCode'],
-                        item['operatingSystem']['name'],
-                        item['operatingSystem']['version'],
-                        item['operatingSystem']['release'],
-                        item['operatingSystem']['build'],
-                        item['operatingSystem']['buildUpdate'],
-                        item['operatingSystem']['type'],
-                        item['operatingSystem']['typeCode'],
-                        item['operatingSystem']['bits'],
-                        item['operatingSystem']['installDate'],
-                        item['hardware']['make'],
-                        item['hardware']['model'],
-                        item['hardware']['type'],
-                        item['hardware']['typeCode'],
-                        item['hardware']['serviceTag'],
-                        item['hardware']['cpu'],
-                        item['hardware']['cpuSpeed'],
-                        item['hardware']['cpuCores'],
-                        item['hardware']['diskSize'],
-                        item['hardware']['diskFree'],
-                        item['hardware']['diskStatus'],
-                        item['hardware']['memory'],
-                        item['hardware']['noMonitors'],
-                        item['hardware']['monitorResolution'],
-                        item['hardware']['bitlockerEnabled'],
-                        item['hardware']['isCompliant'],
-                        item['hardware']['tpmEnabled'],
-                        item['hardware']['tpmVersion'],
-                        item['network']['publicIP'],
-                        item['network']['privateIP'],
-                        item['network']['macAddress'],
-                        item['network']['nicSpeed'],
-                        item['network']['hostName'],
-                        item['location']['city'],
-                        item['location']['region'],
-                        item['location']['country'],
-                        item['location']['latitude'],
-                        item['location']['longitude'],
-                        item['location']['googleMapsLink'],
-                        item['location']['hourOffset'],
-                        item['software']
-                    )
-                    count += 1
-        else:
-            for item in inventory:
-                if item['inventoryAvailable'] and item['inventoryDate'] < days:
-                    inv_obj[count] = ABRRequestInventoryObject(
-                        item['id'],
-                        item['name'],
-                        item['inventoryAvailable'],
-                        item['inventoryDate'],
-                        item['abrClientVersion'],
-                        item['abrClientInstallDate'],
-                        item['notes'],
-                        item['user']['account'],
-                        item['user']['fullName'],
-                        item['user']['email'],
-                        item['user']['phone'],
-                        item['user']['isAdmin'],
-                        item['user']['domain'],
-                        item['user']['isDomainJoined'],
-                        item['user']['isAzureJoined'],
-                        item['user']['orgUnit'],
-                        item['user']['orgUnitPath'],
-                        item['user']['groups'],
-                        item['owner']['account'],
-                        item['owner']['fullName'],
-                        item['computer']['domain'],
-                        item['computer']['isDomainJoined'],
-                        item['computer']['isAzureJoined'],
-                        item['computer']['orgUnit'],
-                        item['computer']['orgUnitPath'],
-                        item['computer']['groups'],
-                        item['computer']['localAdmins'],
-                        item['computer']['users'],
-                        item['operatingSystem']['platform'],
-                        item['operatingSystem']['platformCode'],
-                        item['operatingSystem']['name'],
-                        item['operatingSystem']['version'],
-                        item['operatingSystem']['release'],
-                        item['operatingSystem']['build'],
-                        item['operatingSystem']['buildUpdate'],
-                        item['operatingSystem']['type'],
-                        item['operatingSystem']['typeCode'],
-                        item['operatingSystem']['bits'],
-                        item['operatingSystem']['installDate'],
-                        item['hardware']['make'],
-                        item['hardware']['model'],
-                        item['hardware']['type'],
-                        item['hardware']['typeCode'],
-                        item['hardware']['serviceTag'],
-                        item['hardware']['cpu'],
-                        item['hardware']['cpuSpeed'],
-                        item['hardware']['cpuCores'],
-                        item['hardware']['diskSize'],
-                        item['hardware']['diskFree'],
-                        item['hardware']['diskStatus'],
-                        item['hardware']['memory'],
-                        item['hardware']['noMonitors'],
-                        item['hardware']['monitorResolution'],
-                        item['hardware']['bitlockerEnabled'],
-                        item['hardware']['isCompliant'],
-                        item['hardware']['tpmEnabled'],
-                        item['hardware']['tpmVersion'],
-                        item['network']['publicIP'],
-                        item['network']['privateIP'],
-                        item['network']['macAddress'],
-                        item['network']['nicSpeed'],
-                        item['network']['hostName'],
-                        item['location']['city'],
-                        item['location']['region'],
-                        item['location']['country'],
-                        item['location']['latitude'],
-                        item['location']['longitude'],
-                        item['location']['googleMapsLink'],
-                        item['location']['hourOffset'],
-                        item['software']
-                    )
-                    count += 1
-        return inv_obj
+        
+        try:
+            # Filter inventory items by availability and date in a single pass
+            if unavailable:
+                for item in inventory:
+                    if not item['inventoryAvailable'] or (item['inventoryAvailable'] and item['inventoryDate'] < days):
+                        inv_obj[count] = ABRRequestInventoryObject(
+                            item['id'],
+                            item['name'],
+                            item['inventoryAvailable'],
+                            item['inventoryDate'],
+                            item['abrClientVersion'],
+                            item['abrClientInstallDate'],
+                            item['notes'],
+                            item['user']['account'],
+                            item['user']['fullName'],
+                            item['user']['email'],
+                            item['user']['phone'],
+                            item['user']['isAdmin'],
+                            item['user']['domain'],
+                            item['user']['isDomainJoined'],
+                            item['user']['isAzureJoined'],
+                            item['user']['orgUnit'],
+                            item['user']['orgUnitPath'],
+                            item['user']['groups'],
+                            item['owner']['account'],
+                            item['owner']['fullName'],
+                            item['computer']['domain'],
+                            item['computer']['isDomainJoined'],
+                            item['computer']['isAzureJoined'],
+                            item['computer']['orgUnit'],
+                            item['computer']['orgUnitPath'],
+                            item['computer']['groups'],
+                            item['computer']['localAdmins'],
+                            item['computer']['users'],
+                            item['operatingSystem']['platform'],
+                            item['operatingSystem']['platformCode'],
+                            item['operatingSystem']['name'],
+                            item['operatingSystem']['version'],
+                            item['operatingSystem']['release'],
+                            item['operatingSystem']['build'],
+                            item['operatingSystem']['buildUpdate'],
+                            item['operatingSystem']['type'],
+                            item['operatingSystem']['typeCode'],
+                            item['operatingSystem']['bits'],
+                            item['operatingSystem']['installDate'],
+                            item['hardware']['make'],
+                            item['hardware']['model'],
+                            item['hardware']['type'],
+                            item['hardware']['typeCode'],
+                            item['hardware']['serviceTag'],
+                            item['hardware']['cpu'],
+                            item['hardware']['cpuSpeed'],
+                            item['hardware']['cpuCores'],
+                            item['hardware']['diskSize'],
+                            item['hardware']['diskFree'],
+                            item['hardware']['diskStatus'],
+                            item['hardware']['memory'],
+                            item['hardware']['noMonitors'],
+                            item['hardware']['monitorResolution'],
+                            item['hardware']['bitlockerEnabled'],
+                            item['hardware']['isCompliant'],
+                            item['hardware']['tpmEnabled'],
+                            item['hardware']['tpmVersion'],
+                            item['network']['publicIP'],
+                            item['network']['privateIP'],
+                            item['network']['macAddress'],
+                            item['network']['nicSpeed'],
+                            item['network']['hostName'],
+                            item['location']['city'],
+                            item['location']['region'],
+                            item['location']['country'],
+                            item['location']['latitude'],
+                            item['location']['longitude'],
+                            item['location']['googleMapsLink'],
+                            item['location']['hourOffset'],
+                            item['software']
+                        )
+                        count += 1
+            else:
+                for item in inventory:
+                    if item['inventoryAvailable'] and item['inventoryDate'] < days:
+                        inv_obj[count] = ABRRequestInventoryObject(
+                            item['id'],
+                            item['name'],
+                            item['inventoryAvailable'],
+                            item['inventoryDate'],
+                            item['abrClientVersion'],
+                            item['abrClientInstallDate'],
+                            item['notes'],
+                            item['user']['account'],
+                            item['user']['fullName'],
+                            item['user']['email'],
+                            item['user']['phone'],
+                            item['user']['isAdmin'],
+                            item['user']['domain'],
+                            item['user']['isDomainJoined'],
+                            item['user']['isAzureJoined'],
+                            item['user']['orgUnit'],
+                            item['user']['orgUnitPath'],
+                            item['user']['groups'],
+                            item['owner']['account'],
+                            item['owner']['fullName'],
+                            item['computer']['domain'],
+                            item['computer']['isDomainJoined'],
+                            item['computer']['isAzureJoined'],
+                            item['computer']['orgUnit'],
+                            item['computer']['orgUnitPath'],
+                            item['computer']['groups'],
+                            item['computer']['localAdmins'],
+                            item['computer']['users'],
+                            item['operatingSystem']['platform'],
+                            item['operatingSystem']['platformCode'],
+                            item['operatingSystem']['name'],
+                            item['operatingSystem']['version'],
+                            item['operatingSystem']['release'],
+                            item['operatingSystem']['build'],
+                            item['operatingSystem']['buildUpdate'],
+                            item['operatingSystem']['type'],
+                            item['operatingSystem']['typeCode'],
+                            item['operatingSystem']['bits'],
+                            item['operatingSystem']['installDate'],
+                            item['hardware']['make'],
+                            item['hardware']['model'],
+                            item['hardware']['type'],
+                            item['hardware']['typeCode'],
+                            item['hardware']['serviceTag'],
+                            item['hardware']['cpu'],
+                            item['hardware']['cpuSpeed'],
+                            item['hardware']['cpuCores'],
+                            item['hardware']['diskSize'],
+                            item['hardware']['diskFree'],
+                            item['hardware']['diskStatus'],
+                            item['hardware']['memory'],
+                            item['hardware']['noMonitors'],
+                            item['hardware']['monitorResolution'],
+                            item['hardware']['bitlockerEnabled'],
+                            item['hardware']['isCompliant'],
+                            item['hardware']['tpmEnabled'],
+                            item['hardware']['tpmVersion'],
+                            item['network']['publicIP'],
+                            item['network']['privateIP'],
+                            item['network']['macAddress'],
+                            item['network']['nicSpeed'],
+                            item['network']['hostName'],
+                            item['location']['city'],
+                            item['location']['region'],
+                            item['location']['country'],
+                            item['location']['latitude'],
+                            item['location']['longitude'],
+                            item['location']['googleMapsLink'],
+                            item['location']['hourOffset'],
+                            item['software']
+                        )
+                        count += 1
+            return inv_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if inventory['Message'] == 'Invalid API key':
+                print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
 # /request - Request API extension
     # Get all requests as JSON
@@ -1176,46 +1224,52 @@ class AdminByRequest:
         request = response.json()
         request_obj = {}
         count = 0
-        for item in request:
-            request_obj[count] = ABRRequestRequestsObject(
-                scanResults=item['scanResults'],
-                id=item['id'],
-                traceNo=item['traceNo'],
-                settingsName=item['settingsName'],
-                runType=item['type'],
-                typeCode=item['typeCode'],
-                status=item['status'],
-                statusCode=item['statusCode'],
-                application_file=item['application']['file'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256'],
-                application_scanResult=item['application']['scanResult'],
-                application_scanResultCode=item['application']['scanResultCode'],
-                application_threat=item['application']['threat'],
-                application_virustotalLink=item['application']['virustotalLink'],
-                user_account=item['user']['account'],
-                user_fullname=item['user']['fullName'],
-                user_email=item['user']['email'],
-                user_phone=item['user']['phone'],
-                computer_name=item['computer']['name'],
-                computer_platform=item['computer']['platform'],
-                computer_platformCode=item['computer']['platformCode'],
-                computer_make=item['computer']['make'],
-                computer_model=item['computer']['model'],
-                reason=item['reason'],
-                approvedBy=item['approvedBy'],
-                approvedByEmail=item['approvedByEmail'],
-                deniedReason=item['deniedReason'],
-                deniedBy=item['deniedBy'],
-                deniedByEmail=item['deniedByEmail'],
-                requestTime=item['requestTime'],
-                auditlogLink=item['auditlogLink']
-            )
-            count += 1
-        return request_obj
-    
+        # Error Checking debugging issue with Users seeing issues when using the wrong Datacenter
+        try:
+            for item in request:
+                request_obj[count] = ABRRequestRequestsObject(
+                    scanResults=item['scanResults'],
+                    id=item['id'],
+                    traceNo=item['traceNo'],
+                    settingsName=item['settingsName'],
+                    runType=item['type'],
+                    typeCode=item['typeCode'],
+                    status=item['status'],
+                    statusCode=item['statusCode'],
+                    application_file=item['application']['file'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256'],
+                    application_scanResult=item['application']['scanResult'],
+                    application_scanResultCode=item['application']['scanResultCode'],
+                    application_threat=item['application']['threat'],
+                    application_virustotalLink=item['application']['virustotalLink'],
+                    user_account=item['user']['account'],
+                    user_fullname=item['user']['fullName'],
+                    user_email=item['user']['email'],
+                    user_phone=item['user']['phone'],
+                    computer_name=item['computer']['name'],
+                    computer_platform=item['computer']['platform'],
+                    computer_platformCode=item['computer']['platformCode'],
+                    computer_make=item['computer']['make'],
+                    computer_model=item['computer']['model'],
+                    reason=item['reason'],
+                    approvedBy=item['approvedBy'],
+                    approvedByEmail=item['approvedByEmail'],
+                    deniedReason=item['deniedReason'],
+                    deniedBy=item['deniedBy'],
+                    deniedByEmail=item['deniedByEmail'],
+                    requestTime=item['requestTime'],
+                    auditlogLink=item['auditlogLink']
+                )
+                count += 1
+            return request_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if request['Message'] == 'Invalid API key':
+                print("Message: " + request['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
+
     # Get request by ID as JSON
     def get_request_id(self, id: int):
         url = self.url + 'request/' + str(id)
@@ -1224,43 +1278,49 @@ class AdminByRequest:
         }
         response = requests.get(url, headers=headers)
         request = response.json()
-        request_obj = ABRRequestRequestsObject(
-            scanResults=request['scanResults'],
-            id=request['id'],
-            traceNo=request['traceNo'],
-            settingsName=request['settingsName'],
-            runType=request['type'],
-            typeCode=request['typeCode'],
-            status=request['status'],
-            statusCode=request['statusCode'],
-            application_file=request['application']['file'],
-            application_name=request['application']['name'],
-            application_vendor=request['application']['vendor'],
-            application_version=request['application']['version'],
-            application_sha256=request['application']['sha256'],
-            application_scanResult=request['application']['scanResult'],
-            application_scanResultCode=request['application']['scanResultCode'],
-            application_threat=request['application']['threat'],
-            application_virustotalLink=request['application']['virustotalLink'],
-            user_account=request['user']['account'],
-            user_fullname=request['user']['fullName'],
-            user_email=request['user']['email'],
-            user_phone=request['user']['phone'],
-            computer_name=request['computer']['name'],
-            computer_platform=request['computer']['platform'],
-            computer_platformCode=request['computer']['platformCode'],
-            computer_make=request['computer']['make'],
-            computer_model=request['computer']['model'],
-            reason=request['reason'],
-            approvedBy=request['approvedBy'],
-            approvedByEmail=request['approvedByEmail'],
-            deniedReason=request['deniedReason'],
-            deniedBy=request['deniedBy'],
-            deniedByEmail=request['deniedByEmail'],
-            requestTime=request['requestTime'],
-            auditlogLink=request['auditlogLink']
-        )
-        return request_obj
+        
+        try:
+            request_obj = ABRRequestRequestsObject(
+                scanResults=request['scanResults'],
+                id=request['id'],
+                traceNo=request['traceNo'],
+                settingsName=request['settingsName'],
+                runType=request['type'],
+                typeCode=request['typeCode'],
+                status=request['status'],
+                statusCode=request['statusCode'],
+                application_file=request['application']['file'],
+                application_name=request['application']['name'],
+                application_vendor=request['application']['vendor'],
+                application_version=request['application']['version'],
+                application_sha256=request['application']['sha256'],
+                application_scanResult=request['application']['scanResult'],
+                application_scanResultCode=request['application']['scanResultCode'],
+                application_threat=request['application']['threat'],
+                application_virustotalLink=request['application']['virustotalLink'],
+                user_account=request['user']['account'],
+                user_fullname=request['user']['fullName'],
+                user_email=request['user']['email'],
+                user_phone=request['user']['phone'],
+                computer_name=request['computer']['name'],
+                computer_platform=request['computer']['platform'],
+                computer_platformCode=request['computer']['platformCode'],
+                computer_make=request['computer']['make'],
+                computer_model=request['computer']['model'],
+                reason=request['reason'],
+                approvedBy=request['approvedBy'],
+                approvedByEmail=request['approvedByEmail'],
+                deniedReason=request['deniedReason'],
+                deniedBy=request['deniedBy'],
+                deniedByEmail=request['deniedByEmail'],
+                requestTime=request['requestTime'],
+                auditlogLink=request['auditlogLink']
+            )
+            return request_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if request['Message'] == 'Invalid API key':
+                print("Message: " + request['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Approve request by ID
     def approve_request_id(self, id: int):
@@ -1321,30 +1381,36 @@ class AdminByRequest:
         events = response.json()
         event_obj = {}
         count = 0
-        for item in events:
-            event_obj[count] = ABRRequestEventObjects(
-                id=item['id'],
-                eventCode=item['eventCode'],
-                eventLevel=item['eventLevel'],
-                eventText=item['eventText'],
-                eventTime=item['eventTime'],
-                eventTimeUTC=item['eventTimeUTC'],
-                computerName=item['computerName'],
-                userAccount=item['userAccount'],
-                userName=item['userName'],
-                alertAccount=item['alertAccount'],
-                auditLogURL=item['auditLogURL'],
-                rollback=item['rollback'],
-                additionalData=item['additionalData'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256']
-            )
-            count += 1
-        return event_obj
+        # Error Checking debugging issue with Users seeing issues when using the wrong Datacenter
+        try:
+            for item in events:
+                event_obj[count] = ABRRequestEventObjects(
+                    id=item['id'],
+                    eventCode=item['eventCode'],
+                    eventLevel=item['eventLevel'],
+                    eventText=item['eventText'],
+                    eventTime=item['eventTime'],
+                    eventTimeUTC=item['eventTimeUTC'],
+                    computerName=item['computerName'],
+                    userAccount=item['userAccount'],
+                    userName=item['userName'],
+                    alertAccount=item['alertAccount'],
+                    auditLogURL=item['auditLogURL'],
+                    rollback=item['rollback'],
+                    additionalData=item['additionalData'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256']
+                )
+                count += 1
+            return event_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if events['Message'] == 'Invalid API key':
+                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get event by ID as JSON
     def get_events_id(self, id: int):
@@ -1354,29 +1420,34 @@ class AdminByRequest:
         }
         response = requests.get(url, headers=headers)
         events = response.json()
-        event_obj = ABRRequestEventObjects(
-            id=events['id'],
-            eventCode=events['eventCode'],
-            eventLevel=events['eventLevel'],
-            eventText=events['eventText'],
-            eventTime=events['eventTime'],
-            eventTimeUTC=events['eventTimeUTC'],
-            computerName=events['computerName'],
-            userAccount=events['userAccount'],
-            userName=events['userName'],
-            alertAccount=events['alertAccount'],
-            auditLogURL=events['auditLogURL'],
-            rollback=events['rollback'],
-            additionalData=events['additionalData'],
-            application_file=events['application']['file'],
-            application_path=events['application']['path'],
-            application_name=events['application']['name'],
-            application_vendor=events['application']['vendor'],
-            application_version=events['application']['version'],
-            application_sha256=events['application']['sha256']
-        )
-        return event_obj
-    
+        try:
+            event_obj = ABRRequestEventObjects(
+                id=events['id'],
+                eventCode=events['eventCode'],
+                eventLevel=events['eventLevel'],
+                eventText=events['eventText'],
+                eventTime=events['eventTime'],
+                eventTimeUTC=events['eventTimeUTC'],
+                computerName=events['computerName'],
+                userAccount=events['userAccount'],
+                userName=events['userName'],
+                alertAccount=events['alertAccount'],
+                auditLogURL=events['auditLogURL'],
+                rollback=events['rollback'],
+                additionalData=events['additionalData'],
+                application_file=events['application']['file'],
+                application_path=events['application']['path'],
+                application_name=events['application']['name'],
+                application_vendor=events['application']['vendor'],
+                application_version=events['application']['version'],
+                application_sha256=events['application']['sha256']
+            )
+            return event_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if events['Message'] == 'Invalid API key':
+                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
+                
     # Get all events of a certain computer, by computer name
     def get_event_computer(self, computername: str):
         url = self.url + 'computers/' + computername + "/events"
@@ -1387,31 +1458,37 @@ class AdminByRequest:
         events = response.json()
         event_obj = {}
         count = 0
-        for item in events:
-            event_obj[count] = ABRRequestEventObjects(
-                id=item['id'],
-                eventCode=item['eventCode'],
-                eventLevel=item['eventLevel'],
-                eventText=item['eventText'],
-                eventTime=item['eventTime'],
-                eventTimeUTC=item['eventTimeUTC'],
-                computerName=item['computerName'],
-                userAccount=item['userAccount'],
-                userName=item['userName'],
-                alertAccount=item['alertAccount'],
-                auditLogURL=item['auditLogURL'],
-                rollback=item['rollback'],
-                additionalData=item['additionalData'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256']
-            )
-            count += 1
-        return event_obj
-    
+        
+        try:
+            for item in events:
+                event_obj[count] = ABRRequestEventObjects(
+                    id=item['id'],
+                    eventCode=item['eventCode'],
+                    eventLevel=item['eventLevel'],
+                    eventText=item['eventText'],
+                    eventTime=item['eventTime'],
+                    eventTimeUTC=item['eventTimeUTC'],
+                    computerName=item['computerName'],
+                    userAccount=item['userAccount'],
+                    userName=item['userName'],
+                    alertAccount=item['alertAccount'],
+                    auditLogURL=item['auditLogURL'],
+                    rollback=item['rollback'],
+                    additionalData=item['additionalData'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256']
+                )
+                count += 1
+            return event_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if events['Message'] == 'Invalid API key':
+                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
+                    
     # Get all events of a certain user, by username
     def get_events_user(self, username: str):
         url = self.url + 'users/' + username + "/events"
@@ -1422,30 +1499,36 @@ class AdminByRequest:
         events = response.json()
         event_obj = {}
         count = 0
-        for item in events:
-            event_obj[count] = ABRRequestEventObjects(
-                id=item['id'],
-                eventCode=item['eventCode'],
-                eventLevel=item['eventLevel'],
-                eventText=item['eventText'],
-                eventTime=item['eventTime'],
-                eventTimeUTC=item['eventTimeUTC'],
-                computerName=item['computerName'],
-                userAccount=item['userAccount'],
-                userName=item['userName'],
-                alertAccount=item['alertAccount'],
-                auditLogURL=item['auditLogURL'],
-                rollback=item['rollback'],
-                additionalData=item['additionalData'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256']
-            )
-            count += 1
-        return event_obj
+        
+        try:
+            for item in events:
+                event_obj[count] = ABRRequestEventObjects(
+                    id=item['id'],
+                    eventCode=item['eventCode'],
+                    eventLevel=item['eventLevel'],
+                    eventText=item['eventText'],
+                    eventTime=item['eventTime'],
+                    eventTimeUTC=item['eventTimeUTC'],
+                    computerName=item['computerName'],
+                    userAccount=item['userAccount'],
+                    userName=item['userName'],
+                    alertAccount=item['alertAccount'],
+                    auditLogURL=item['auditLogURL'],
+                    rollback=item['rollback'],
+                    additionalData=item['additionalData'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256']
+                )
+                count += 1
+            return event_obj
+        except Exception as e:
+            print("Error: " + str(e))
+            if events['Message'] == 'Invalid API key':
+                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
      
     # Get Errors by Code
     def get_events_errorCode(self, limit: int = 10000, offset: int = 0, errorCode = ABREventCodes.Support_Assist_Initiated):
@@ -1467,31 +1550,37 @@ class AdminByRequest:
             events = response.json()
         event_obj = {}
         count = 0
-        for item in events:
-            event_obj[count] = ABRRequestEventObjects(
-                id=item['id'],
-                eventCode=item['eventCode'], # This is Consistant because this only returns the same event.
-                eventLevel=item['eventLevel'],
-                eventText=item['eventText'],
-                eventTime=item['eventTime'],
-                eventTimeUTC=item['eventTimeUTC'],
-                computerName=item['computerName'],
-                userAccount=item['userAccount'],
-                userName=item['userName'],
-                alertAccount=item['alertAccount'],
-                auditLogURL=item['auditLogURL'],
-                rollback=item['rollback'],
-                additionalData=item['additionalData'],
-                application_file=item['application']['file'],
-                application_path=item['application']['path'],
-                application_name=item['application']['name'],
-                application_vendor=item['application']['vendor'],
-                application_version=item['application']['version'],
-                application_sha256=item['application']['sha256']
-            )
-            count += 1
-        return event_obj  
-    
+        
+        try:
+            for item in events:
+                event_obj[count] = ABRRequestEventObjects(
+                    id=item['id'],
+                    eventCode=item['eventCode'], # This is Consistant because this only returns the same event.
+                    eventLevel=item['eventLevel'],
+                    eventText=item['eventText'],
+                    eventTime=item['eventTime'],
+                    eventTimeUTC=item['eventTimeUTC'],
+                    computerName=item['computerName'],
+                    userAccount=item['userAccount'],
+                    userName=item['userName'],
+                    alertAccount=item['alertAccount'],
+                    auditLogURL=item['auditLogURL'],
+                    rollback=item['rollback'],
+                    additionalData=item['additionalData'],
+                    application_file=item['application']['file'],
+                    application_path=item['application']['path'],
+                    application_name=item['application']['name'],
+                    application_vendor=item['application']['vendor'],
+                    application_version=item['application']['version'],
+                    application_sha256=item['application']['sha256']
+                )
+                count += 1
+            return event_obj  
+        except Exception as e:
+            print("Error: " + str(e))
+            if events['Message'] == 'Invalid API key':
+                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
+
 # /pin - Pin Code API extension (Extension of the Invetory API)
     # Get pin code as String from the computer's Inventory by computer id
     def get_pin_id(self, id: int):
