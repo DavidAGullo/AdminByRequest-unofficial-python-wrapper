@@ -1,3 +1,7 @@
+# ***IMPORTANT***
+
+All issues with the script should be posted here, not with Admin By Request, Admin By Request does not officially support this project, nor any other API tool outside of their Integrations.
+
 # AdminByRequest (Unofficial Python Package)
 
 Feel free to use this for your projects if you are developing things with the Admin by Request API. I mostly use this to show proof of concepts of all that is available with the API. This project is still a work in progress so sorry if everything isn't available yet. This is not associated with the Admin by Request company and contains nothing special outside of the already available Public API documented at [Public API &gt;  API Overview](https://www.adminbyrequest.com/en/docs/api-overview)
