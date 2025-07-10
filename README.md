@@ -1,4 +1,4 @@
-# ***IMPORTANT***
+# **IMPORTANT**
 
 All issues with the script should be posted here, not with Admin By Request, Admin By Request does not officially support this project, nor any other API tool outside of their Integrations.
 
