@@ -38,7 +38,7 @@ pip install requests
    - [Request API](#requests-api-)
    - [Events API](#events-api-)
    - [Pincode API (WIP)](#pin-api-wip-)
-3. [Admin by Request - Request Objects](#admin-by-request---request-objects)
+3. [Examples](#examples)
 
 
 ## Getting Started
