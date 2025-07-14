@@ -5,11 +5,11 @@ import datetime
 class ABRRequestAuditlogObject:
     def __init__(
         self,
-        installs,
-        uninstalls,
-        elevatedApplications,
-        scanResults,
-        id: int,
+        installs = [],
+        uninstalls = [],
+        elevatedApplications = None,
+        scanResults = None,
+        id: int = None,
         traceNo='',
         settingsName='', 
         runType='', 
@@ -443,26 +443,60 @@ class ABRDatacenter(Enum):
     dc1 = 'dc1'
     dc2 = 'dc2'
     
+class ABR_AdminTypes(Enum):
+    runasadmin: str = 'app'
+    adminsession: str = 'session'
+
+class ABR_Status(Enum):
+    pending = 'Pending'
+    approved = 'Approved'
+    denied = 'Denied'
+    quarantined = 'Quarantined'
+        
 class AdminByRequest:  
     def __init__(self, apikey, datacenter=ABRDatacenter.dc1):
         self.datacenter = datacenter
         self.api_key = apikey
         self.url = ''
-        if datacenter == ABRDatacenter.dc1:
+        if datacenter == ABRDatacenter.dc1 or datacenter == 'dc1':
             self.url = 'https://dc1api.adminbyrequest.com/'
-        elif datacenter == ABRDatacenter.dc2:
+        elif datacenter == ABRDatacenter.dc2 or datacenter == 'dc2':
             self.url = 'https://dc2api.adminbyrequest.com/'
             
         
 # /auditlog - Audit Log API extension
 
     # Get all audit logs as JSON
-    def get_auditlog(self, limit:int = 10000, offset: int=0):
+    def get_auditlog(self, 
+                     start_id: int=None, 
+                     take: int=50, 
+                     last: int=None, 
+                     wantscandetails: int=None,
+                     a_type: ABR_AdminTypes=None,
+                     status: ABR_Status=None,
+                     days: int=30,
+                     startdate: datetime.datetime=None,
+                     enddate: datetime.datetime=None):
         url=''
-        if offset > 0:
-            url = self.url + 'auditlog?limit=' + str(limit) + '&offset=' + str(offset)
-        elif offset == 0:
-            url = self.url + 'auditlog?limit=' + str(limit)
+        url = self.url + 'auditlog'
+        if last is not None:
+            url += "?last=" + str(last)
+        elif take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url += '&wantscandetails=' + str(wantscandetails)
+        if a_type is not None:
+            url += '&type=' + a_type
+        if status is not None:
+            url += '&status=' + status
+        if days is not None and (startdate is None and enddate is None):
+            url += '&days=' + str(days)
+        if startdate is not None and enddate is not None and days is None:
+            url += '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+            
+        
         headers = {
             "apikey": self.api_key
         }
@@ -531,8 +565,35 @@ class AdminByRequest:
                 print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by ID as JSON
-    def get_auditlog_id(self, id: int):
+    def get_auditlog_id(self, 
+                    id : int,
+                    start_id: int=None, 
+                    take: int=50, 
+                    last: int=None, 
+                    wantscandetails: int=None,
+                    a_type: ABR_AdminTypes=None,
+                    status: ABR_Status=None,
+                    days: int=30,
+                    startdate: datetime.datetime=None,
+                    enddate: datetime.datetime=None):
+        url=''
         url = self.url + 'auditlog/' + str(id)
+        if last is not None:
+            url = self.url + "?last=" + str(last)
+        elif take is not None:
+            url = self.url + "?take=" + str(take)
+        if start_id is not None:
+            url = self.url + '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url = self.url + '&wantscandetails=' + str(wantscandetails)
+        if a_type is not None:
+            url = self.url + '&type=' + a_type.value
+        if status is not None:
+            url = self.url + '&status=' + status.value
+        if days is not None and (startdate is None and enddate is None):
+            url = self.url + '&days=' + str(days)
+        if startdate is not None and enddate is not None and days is None:
+            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
         headers = {
             "apikey": self.api_key
         }
@@ -595,8 +656,35 @@ class AdminByRequest:
                 print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by computer as JSON
-    def get_auditlog_computer(self, computername: str):
+    def get_auditlog_computer(self, 
+                    computername : str,
+                    start_id: int=None, 
+                    take: int=50, 
+                    last: int=None, 
+                    wantscandetails: int=None,
+                    a_type: ABR_AdminTypes=None,
+                    status: ABR_Status=None,
+                    days: int=30,
+                    startdate: datetime.datetime=None,
+                    enddate: datetime.datetime=None):
+        url=''
         url = self.url + 'computers/' + computername + "/auditlog"
+        if last is not None:
+            url = self.url + "?last=" + str(last)
+        elif take is not None:
+            url = self.url + "?take=" + str(take)
+        if start_id is not None:
+            url = self.url + '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url = self.url + '&wantscandetails=' + str(wantscandetails)
+        if a_type is not None:
+            url = self.url + '&type=' + a_type.value
+        if status is not None:
+            url = self.url + '&status=' + status.value
+        if days is not None and (startdate is None and enddate is None):
+            url = self.url + '&days=' + str(days)
+        if startdate is not None and enddate is not None and days is None:
+            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
         headers = {
             "apikey": self.api_key
         }
@@ -663,8 +751,35 @@ class AdminByRequest:
                 print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get audit log by user as JSON
-    def get_auditlog_username(self, username: str):
-        url = self.url + 'users/' + username + "/auditlog"
+    def get_auditlog_username(self, 
+                    user : int,
+                    start_id: int=None, 
+                    take: int=50, 
+                    last: int=None, 
+                    wantscandetails: int=None,
+                    a_type: ABR_AdminTypes=None,
+                    status: ABR_Status=None,
+                    days: int=30,
+                    startdate: datetime.datetime=None,
+                    enddate: datetime.datetime=None):
+        url=''
+        url = self.url + 'users/' + str(user) + "/auditlog"
+        if last is not None:
+            url = self.url + "?last=" + str(last)
+        elif take is not None:
+            url = self.url + "?take=" + str(take)
+        if start_id is not None:
+            url = self.url + '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url = self.url + '&wantscandetails=' + str(wantscandetails)
+        if a_type is not None:
+            url = self.url + '&type=' + a_type.value
+        if status is not None:
+            url = self.url + '&status=' + status.value
+        if days is not None and (startdate is None and enddate is None):
+            url = self.url + '&days=' + str(days)
+        if startdate is not None and enddate is not None and days is None:
+            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
         headers = {
             "apikey": self.api_key
         }
@@ -732,8 +847,35 @@ class AdminByRequest:
                 print("Message: " + auditlog['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get the timeNow Value which will be used to calculate until the next delta [This number increases by second]
-    def get_auditlogs_delta(self, fullLog: bool=False):
-        url = self.url + 'auditlog/delta?limit=10000'
+    def get_auditlogs_delta(self, 
+                    fullLog: bool=False,
+                    start_id: int=None, 
+                    take: int=50, 
+                    last: int=None, 
+                    wantscandetails: int=None,
+                    a_type: ABR_AdminTypes=None,
+                    status: ABR_Status=None,
+                    days: int=30,
+                    startdate: datetime.datetime=None,
+                    enddate: datetime.datetime=None):
+        url=''
+        url = self.url + 'auditlog/delta'
+        if last is not None:
+            url = self.url + "?last=" + str(last)
+        elif take is not None:
+            url = self.url + "?take=" + str(take)
+        if start_id is not None:
+            url = self.url + '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url = self.url + '&wantscandetails=' + str(wantscandetails)
+        if a_type is not None:
+            url = self.url + '&type=' + a_type.value
+        if status is not None:
+            url = self.url + '&status=' + status.value
+        if days is not None and (startdate is None and enddate is None):
+            url = self.url + '&days=' + str(days)
+        if startdate is not None and enddate is not None and days is None:
+            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
         headers = {
             "apikey": self.api_key
         }
@@ -747,12 +889,21 @@ class AdminByRequest:
 
 # /inventory - Inventory API extension
     # Get all inventory items as JSON
-    def get_inventory(self, limit: int=10000, offset: int=0):
-        url=''
-        if offset > 0:
-            url = self.url + 'inventory?limit=' + str(limit) + '&offset=' + str(offset)
-        elif offset == 0:
-            url = self.url + 'inventory?limit=' + str(limit)
+    def get_inventory(self, 
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None):
+        url = self.url + 'inventory'
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
+        
         headers = {
             "apikey": self.api_key
         }
@@ -845,8 +996,21 @@ class AdminByRequest:
                 print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get inventory item by ID as JSON
-    def get_inventory_id(self, id: int):
+    def get_inventory_id(self, 
+                    id : int,
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None):
         url = self.url + 'inventory/' + str(id)
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
         headers = {
             "apikey": self.api_key
         }
@@ -933,8 +1097,21 @@ class AdminByRequest:
                 print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
         
     # Get inventory item by computer as JSON
-    def get_inventory_computer(self, computername: str):
-        url = self.url + "/inventory/" + computername
+    def get_inventory_computer(self,
+                    computername : str, 
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None):
+        url = self.url + 'inventory/' + computername
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
         headers = {
             "apikey": self.api_key
         }
@@ -1021,16 +1198,42 @@ class AdminByRequest:
                 print("Message: " + inventory['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
         
     # Delete Inventory by ID
-    def delete_inventory_id(self, id: int):
+    def delete_inventory_id(self,
+                    id : int, 
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None):
         url = self.url + 'inventory/' + str(id)
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
         headers = {
             "apikey": self.api_key
         }
         requests.delete(url, headers=headers)
         
     # Delete Inventory by computer
-    def delete_inventory_computer(self, computername: str):
-        url = self.url + 'inventory/' + computername
+    def delete_inventory_computer(self,
+                    computer : str, 
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None):
+        url = self.url + 'inventory/' + computer
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
         headers = {
             "apikey": self.api_key
         }
@@ -1039,12 +1242,26 @@ class AdminByRequest:
 
     # Functional Functions
     # Get Computers where InventoryDate is older than X days
-    def get_inventory_by_date(self, days: int, limit: int=10000, unavailable=False):
+    def get_inventory_by_date(self,
+                    days: int=30,
+                    take: int=50,
+                    start_id: int=None,
+                    wantgroups: int=None,
+                    wantsoftware: int=None, 
+                    unavailable: bool=False):
         # Convert days to "YYYY-MM-DD T HH:MM:SS.MlS" format
         days = datetime.datetime.now() - datetime.timedelta(days=days)
         days = days.strftime('%Y-%m-%dT%H:%M:%S.%f')[:- 3]
 
-        url = self.url + 'inventory?limit=' + str(limit)
+        url = self.url + 'inventory'
+        if take is not None:
+            url += "?take=" + str(take)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantgroups is not None:
+            url += '&wantgroups=' + str(wantgroups)
+        if wantsoftware is not None:
+            url += '&wantsoftware=' + str(wantsoftware)
         headers = {
             "apikey": self.api_key
         }
