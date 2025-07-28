@@ -1432,8 +1432,24 @@ class AdminByRequest:
     
 # /request - Request API extension
     # Get all requests as JSON
-    def get_requests(self, limit: int=10000, offset: int=0):
-        url = self.url + 'requests?limit=' + str(limit) + '&offset=' + str(offset)
+    def get_requests(self,
+                    take: int=50,
+                    status: ABR_Status=None,
+                    start_id: int=None,
+                    last: int=None,
+                    wantscandetails: int=None):
+        url = self.url + 'requests'
+        if take is not None:
+            url += "?take=" + str(take)
+        elif last is not None:
+            url += "?last=" + str(last)
+        if status is not None:
+            url += '&status=' + str(status)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if wantscandetails is not None:
+            url += '&wantscandetails=' + str(wantscandetails)
+
         headers = {
             "apikey": self.api_key
         }
@@ -1488,8 +1504,8 @@ class AdminByRequest:
                 print("Message: " + request['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
 
     # Get request by ID as JSON
-    def get_request_id(self, id: int):
-        url = self.url + 'request/' + str(id)
+    def get_request_id(self, id : int):
+        url = self.url + 'requests/' + str(id)           
         headers = {
             "apikey": self.api_key
         }
@@ -1540,47 +1556,67 @@ class AdminByRequest:
                 print("Message: " + request['Message'] + "Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Approve request by ID
-    def approve_request_id(self, id: int):
-        url = self.url + 'request/' + str(id)
-        headers = {
-            "apikey": self.api_key
-        }
-        requests.put(url, headers=headers)
-        
-    # Approve request by ID with approved by
-    def approve_request_id_approvedby(self, id: int, approvedby: str):
-        url = self.url + 'request/' + str(id) + '?approvedby=' + approvedby
+    def approve_request(self,
+                    id: int,
+                    approvedby: str=None):
+        url = self.url + 'requests/' + str(id)
+        if approvedby is not None:
+            url += '?approvedby=' + approvedby
         headers = {
             "apikey": self.api_key
         }
         requests.put(url, headers=headers)
     
     # Deny request by ID
-    def deny_request_id(self, id: int):
-        url = self.url + 'request/' + str(id)
+    def deny_request(self,
+                    id: int,
+                    reason: str=None,
+                    deniedby: str=None):
+        url = self.url + 'requests/' + str(id)
+        if reason is not None and deniedby is not None:
+            url += '?reason=' + reason + '&deniedby=' + deniedby
+        elif reason is not None:
+            url += '?reason=' + reason
+        elif deniedby is not None:
+            url += '?deniedby=' + deniedby
+
         headers = {
             "apikey": self.api_key
         }
         requests.delete(url, headers=headers)
+            
+    # Approve request by ID with approved by [DEPRECATED]
+    def approve_request_id_approvedby(self, id: int, approvedby: str, ignoreWarning: bool=False):
+        if not ignoreWarning: print("Warning: This method is deprecated, use approve_request() instead")
+        url = self.url + 'request/' + str(id) + '?approvedby=' + approvedby
+        headers = {
+            "apikey": self.api_key
+        }
+        requests.put(url, headers=headers)
+    
+    
         
-    # Deny Request by ID with denied by and reason
-    def deny_request_id_reason_deniedby(self, id: int, deniedby: str, reason: str):
+    # Deny Request by ID with denied by and reason [DEPRECATED]
+    def deny_request_id_reason_deniedby(self, id: int, deniedby: str, reason: str, ignoreWarning: bool=False):
+        if not ignoreWarning: print("Warning: This method is deprecated, use deny_request() instead")
         url = self.url + 'request/' + str(id) + '?deniedby=' + deniedby + '&reason=' + reason
         headers = {
             "apikey": self.api_key
         }
         requests.delete(url, headers=headers)
         
-    # Deny Request by ID with denied by
-    def deny_request_id_deniedby(self, id: int, deniedby: str):
+    # Deny Request by ID with denied by [DEPRECATED]
+    def deny_request_id_deniedby(self, id: int, deniedby: str, ignoreWarning: bool=False):
+        if not ignoreWarning: print("Warning: This method is deprecated, use deny_request() instead")
         url = self.url + 'request/' + str(id) + '?deniedby=' + deniedby
         headers = {
             "apikey": self.api_key
         }
         requests.delete(url, headers=headers)
         
-    # Deny Request by ID with reason
-    def deny_request_id_reason(self, id: int, reason: str):
+    # Deny Request by ID with reason [DEPRECATED]
+    def deny_request_id_reason(self, id: int, reason: str, ignoreWarning: bool=False):
+        if not ignoreWarning: print("Warning: This method is deprecated, use deny_request() instead")
         url = self.url + 'request/' + str(id) + '?reason=' + reason
         headers = {
             "apikey": self.api_key
@@ -1589,8 +1625,29 @@ class AdminByRequest:
     
 # /events - Events API extension
     # Get all events as JSON
-    def get_events(self, limit: int=10000, offset: int=0):
-        url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset)
+    def get_events(self,
+                    take: int=50,
+                    start_id: int=None,
+                    last: int=None,
+                    code: ABREventCodes=None,
+                    days: int=None,
+                    startdate: str=None,
+                    enddate: str=None):
+        url = self.url + 'events'
+        if take is not None:
+            url += "?take=" + str(take)
+        elif last is not None:
+            url += "?last=" + str(last)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if code is not None:
+            url += '&code=' + str(code)
+        if days is not None:
+            url += '&days=' + str(days)
+        if startdate is not None:
+            url += '&startdate=' + startdate
+        if enddate is not None:
+            url += '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -1630,8 +1687,30 @@ class AdminByRequest:
                 print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
     
     # Get event by ID as JSON
-    def get_events_id(self, id: int):
-        url = self.url + 'events/' + str(id)
+    def get_events_id(self,
+                    id: int,
+                    take: int=50,
+                    start_id: int=None,
+                    last: int=None,
+                    code: ABREventCodes=None,
+                    days: int=None,
+                    startdate: str=None,
+                    enddate: str=None):
+        url = self.url + 'events/'
+        if take is not None:
+            url += "?take=" + str(take)
+        elif last is not None:
+            url += "?last=" + str(last)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if code is not None:
+            url += '&code=' + str(code)
+        if days is not None:
+            url += '&days=' + str(days)
+        if startdate is not None:
+            url += '&startdate=' + startdate
+        if enddate is not None:
+            url += '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -1666,8 +1745,30 @@ class AdminByRequest:
                 print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
                 
     # Get all events of a certain computer, by computer name
-    def get_event_computer(self, computername: str):
-        url = self.url + 'computers/' + computername + "/events"
+    def get_event_computer(self,
+                    computer: str,
+                    take: int=50,
+                    start_id: int=None,
+                    last: int=None,
+                    code: ABREventCodes=None,
+                    days: int=None,
+                    startdate: str=None,
+                    enddate: str=None):
+        url = self.url + 'computers/' + computer + "/events"
+        if take is not None:
+            url += "?take=" + str(take)
+        elif last is not None:
+            url += "?last=" + str(last)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if code is not None:
+            url += '&code=' + str(code)
+        if days is not None:
+            url += '&days=' + str(days)
+        if startdate is not None:
+            url += '&startdate=' + startdate
+        if enddate is not None:
+            url += '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -1707,8 +1808,30 @@ class AdminByRequest:
                 print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
                     
     # Get all events of a certain user, by username
-    def get_events_user(self, username: str):
-        url = self.url + 'users/' + username + "/events"
+    def get_events_user(self,
+                    user: str,
+                    take: int=50,
+                    start_id: int=None,
+                    last: int=None,
+                    code: ABREventCodes=None,
+                    days: int=None,
+                    startdate: str=None,
+                    enddate: str=None):
+        url = self.url + 'users/' + user + "/events"
+        if take is not None:
+            url += "?take=" + str(take)
+        elif last is not None:
+            url += "?last=" + str(last)
+        if start_id is not None:
+            url += '&startid=' + str(start_id)
+        if code is not None:
+            url += '&code=' + str(code)
+        if days is not None:
+            url += '&days=' + str(days)
+        if startdate is not None:
+            url += '&startdate=' + startdate
+        if enddate is not None:
+            url += '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -1747,58 +1870,7 @@ class AdminByRequest:
             if events['Message'] == 'Invalid API key':
                 print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
      
-    # Get Errors by Code
-    def get_events_errorCode(self, limit: int = 10000, offset: int = 0, errorCode = ABREventCodes.Support_Assist_Initiated):
-        events = None
-        if errorCode not in ABREventCodes:
-            url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset) + '&code=' + str(errorCode)
-            headers = {
-                "apikey": self.api_key
-            }
-            response = requests.get(url, headers=headers)
-            events = response.json()
-        else:
-            errorCode: int = errorCode.value
-            url = self.url + 'events?limit=' + str(limit) + '&offset=' + str(offset) + '&code=' + str(errorCode)
-            headers = {
-                "apikey": self.api_key
-            }
-            response = requests.get(url, headers=headers)
-            events = response.json()
-        event_obj = {}
-        count = 0
-        
-        try:
-            for item in events:
-                event_obj[count] = ABRRequestEventObjects(
-                    id=item['id'],
-                    eventCode=item['eventCode'], # This is Consistant because this only returns the same event.
-                    eventLevel=item['eventLevel'],
-                    eventText=item['eventText'],
-                    eventTime=item['eventTime'],
-                    eventTimeUTC=item['eventTimeUTC'],
-                    computerName=item['computerName'],
-                    userAccount=item['userAccount'],
-                    userName=item['userName'],
-                    alertAccount=item['alertAccount'],
-                    auditLogURL=item['auditLogURL'],
-                    rollback=item['rollback'],
-                    additionalData=item['additionalData'],
-                    application_file=item['application']['file'],
-                    application_path=item['application']['path'],
-                    application_name=item['application']['name'],
-                    application_vendor=item['application']['vendor'],
-                    application_version=item['application']['version'],
-                    application_sha256=item['application']['sha256']
-                )
-                count += 1
-            return event_obj  
-        except Exception as e:
-            print("Error: " + str(e))
-            if events['Message'] == 'Invalid API key':
-                print("Message: " + events['Message'] + " Check your API Key/Datacenter DC1 is EU and DC2 is US")
-
-# /pin - Pin Code API extension (Extension of the Invetory API)
+    # /pin - Pin Code API extension (Extension of the Invetory API)
     # Get pin code as String from the computer's Inventory by computer id
     def get_pin_id(self, id: int):
         url = self.url + 'inventory/' + str(id) + '/pin'

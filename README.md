@@ -126,12 +126,8 @@ This targets the Requests API which includes GET, PUT, and DELETE resources for 
 
 - `get_requests(...)` — Get all pending/processed elevation requests
 - `get_request_id(id)` — Get a specific request by ID
-- `approve_request_id(id)` — Approve a request
-- `approve_request_id_approvedby(id, approver)` — Approve a request and specify approver
-- `deny_request_id(id)` — Deny a request
-- `deny_request_id_reason(id, reason)` — Deny a request and specify reason
-- `deny_request_id_deniedby(id, deniedby)` — Deny a request and specify who denied it
-- `deny_request_id_reason_deniedby(id, deniedby, reason)` — Deny a request with both reason and who denied
+- `approve_request(id)` — Approve a request
+- `deny_request(id)` — Deny a request
 
 Returns: `ABRRequestRequestsObject` instances (or dict of them)
 
