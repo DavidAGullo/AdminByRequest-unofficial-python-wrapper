@@ -440,8 +440,12 @@ class ABREventCodes(Enum):
     RotatingAdmin_Account_Login = 182
      
 class ABRDatacenter(Enum):
-    dc1 = 'dc1'
-    dc2 = 'dc2'
+    dc1 = 'dc1' # EU - Netherlands
+    dc2 = 'dc2' # Us - East
+    dc3 = 'dc3' # EU - UK
+    dc4 = 'dc4' # EU - Germany
+    dc5 = 'dc5' # US - West
+    dc6 = 'dc6' # Asia - Singapore
     
 class ABR_AdminTypes(Enum):
     runasadmin: str = 'app'
@@ -457,11 +461,27 @@ class AdminByRequest:
     def __init__(self, apikey, datacenter=ABRDatacenter.dc1):
         self.datacenter = datacenter
         self.api_key = apikey
-        self.url = ''
-        if datacenter == ABRDatacenter.dc1 or datacenter == 'dc1':
-            self.url = 'https://dc1api.adminbyrequest.com/'
-        elif datacenter == ABRDatacenter.dc2 or datacenter == 'dc2':
-            self.url = 'https://dc2api.adminbyrequest.com/'
+
+        dc = 'dc1'
+        match datacenter:
+            case ABRDatacenter.dc1:
+                dc = 'dc1'
+            case ABRDatacenter.dc2:
+                dc = 'dc2'
+            case ABRDatacenter.dc3:
+                dc = 'dc3'
+            case ABRDatacenter.dc4:
+                dc = 'dc4'
+            case ABRDatacenter.dc5:
+                dc = 'dc5'
+            case ABRDatacenter.dc6:
+                dc = 'dc6'
+            case _:
+                if datacenter != None:
+                    dc = str(datacenter)  # in case it's passed as a raw string
+                else:
+                    dc = 'dc1'
+        self.url = f'https://{dc}api.adminbyrequest.com/'
             
         
 # /auditlog - Audit Log API extension
