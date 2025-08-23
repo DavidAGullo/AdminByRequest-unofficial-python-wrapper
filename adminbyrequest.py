@@ -513,8 +513,8 @@ class AdminByRequest:
             url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url += '&days=' + str(days)
-        if startdate is not None and enddate is not None and days is None:
-            url += '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+        if startdate is not None and enddate is not None:
+            url += '&startdate=' + startdate + '&enddate=' + enddate
             
         
         headers = {
@@ -612,8 +612,8 @@ class AdminByRequest:
             url = self.url + '&status=' + status.value
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
-        if startdate is not None and enddate is not None and days is None:
-            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+        if startdate is not None and enddate is not None:
+            url += '&startdate=' + startdate + '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -703,8 +703,8 @@ class AdminByRequest:
             url = self.url + '&status=' + status.value
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
-        if startdate is not None and enddate is not None and days is None:
-            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+        if startdate is not None and enddate is not None:
+            url += '&startdate=' + startdate + '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -798,8 +798,8 @@ class AdminByRequest:
             url = self.url + '&status=' + status.value
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
-        if startdate is not None and enddate is not None and days is None:
-            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+        if startdate is not None and enddate is not None:
+            url += '&startdate=' + startdate + '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
@@ -894,8 +894,8 @@ class AdminByRequest:
             url = self.url + '&status=' + status.value
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
-        if startdate is not None and enddate is not None and days is None:
-            url = self.url + '&startdate=' + startdate.strftime('%Y-%m-%dT%H:%M:%S') + '&enddate=' + enddate.strftime('%Y-%m-%dT%H:%M:%S')
+        if startdate is not None and enddate is not None:
+            url += '&startdate=' + startdate + '&enddate=' + enddate
         headers = {
             "apikey": self.api_key
         }
