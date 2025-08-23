@@ -176,3 +176,9 @@ Returns: string PIN code
 
  ### Get Auditlogs
  Shows how you can setup the all the auditlogs you would like, up to 10000 per request.
+
+ ### Monthly Auditlog Report
+ Provided given Month and Year, this will give you all your audit logs for that month. Uses filters like Start and End Date
+
+ ### Pagination Example
+ Provides an example of Pagination in case you need to grab multiple pages worth of request. this offloads multiple entries into different requests. **WARNING** This should not be used to Max out the API, in doing so you will be rate limited. 
