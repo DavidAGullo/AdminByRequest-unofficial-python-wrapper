@@ -162,8 +162,8 @@ This targets the PIN Code API which provides one GET resource per computer:
 
 ### PIN functions
 
-- `get_pin_id(id)` — Get PIN code for a computer by inventory ID
-- `get_pin_computer(computername)` — Get PIN code for a computer by name
+- `get_uninstall_pin(id or computer)` — Get Uninstall PIN code for a computer via ID or Computer Name
+- `get_second_pin(pin)` — Get PIN2 from PIN1
 
 Returns: string PIN code
 
@@ -182,3 +182,12 @@ Returns: string PIN code
 
  ### Pagination Example
  Provides an example of Pagination in case you need to grab multiple pages worth of request. this offloads multiple entries into different requests. **WARNING** This should not be used to Max out the API, in doing so you will be rate limited. 
+
+ ### Request Approve or Deny Tool
+ This tool was created to show case how the Approval and Denial works in the RequestAPI, it features Approvedby and Declinedby and allows for reason. 
+
+ ### Pin Code for Uninstalls
+ The tool will allow you to select a take of your computers and create an uninstall pin.
+
+ ### Pin Code from Pin1
+ This will give you a Pin 2 from Pin 1, given you provide the computer name
