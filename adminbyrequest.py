@@ -493,7 +493,7 @@ class AdminByRequest:
                      last: int=None, 
                      wantscandetails: int=None,
                      a_type: ABR_AdminTypes=None,
-                     status: ABR_Status=None,
+                     status: str = None,
                      days: int=30,
                      startdate: datetime.datetime=None,
                      enddate: datetime.datetime=None):
@@ -510,7 +510,10 @@ class AdminByRequest:
         if a_type is not None:
             url += '&type=' + a_type
         if status is not None:
-            url += '&status=' + status
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url += '&days=' + str(days)
         if startdate is not None and enddate is not None:
@@ -592,7 +595,7 @@ class AdminByRequest:
                     last: int=None, 
                     wantscandetails: int=None,
                     a_type: ABR_AdminTypes=None,
-                    status: ABR_Status=None,
+                    status: str = None,
                     days: int=30,
                     startdate: datetime.datetime=None,
                     enddate: datetime.datetime=None):
@@ -609,7 +612,10 @@ class AdminByRequest:
         if a_type is not None:
             url = self.url + '&type=' + a_type.value
         if status is not None:
-            url = self.url + '&status=' + status.value
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
         if startdate is not None and enddate is not None:
@@ -683,7 +689,7 @@ class AdminByRequest:
                     last: int=None, 
                     wantscandetails: int=None,
                     a_type: ABR_AdminTypes=None,
-                    status: ABR_Status=None,
+                    status: str = None,
                     days: int=30,
                     startdate: datetime.datetime=None,
                     enddate: datetime.datetime=None):
@@ -700,7 +706,10 @@ class AdminByRequest:
         if a_type is not None:
             url = self.url + '&type=' + a_type.value
         if status is not None:
-            url = self.url + '&status=' + status.value
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
         if startdate is not None and enddate is not None:
@@ -778,7 +787,7 @@ class AdminByRequest:
                     last: int=None, 
                     wantscandetails: int=None,
                     a_type: ABR_AdminTypes=None,
-                    status: ABR_Status=None,
+                    status: str = None,
                     days: int=30,
                     startdate: datetime.datetime=None,
                     enddate: datetime.datetime=None):
@@ -795,7 +804,10 @@ class AdminByRequest:
         if a_type is not None:
             url = self.url + '&type=' + a_type.value
         if status is not None:
-            url = self.url + '&status=' + status.value
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
         if startdate is not None and enddate is not None:
@@ -874,7 +886,7 @@ class AdminByRequest:
                     last: int=None, 
                     wantscandetails: int=None,
                     a_type: ABR_AdminTypes=None,
-                    status: ABR_Status=None,
+                    status: str = None,
                     days: int=30,
                     startdate: datetime.datetime=None,
                     enddate: datetime.datetime=None):
@@ -891,7 +903,10 @@ class AdminByRequest:
         if a_type is not None:
             url = self.url + '&type=' + a_type.value
         if status is not None:
-            url = self.url + '&status=' + status.value
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if days is not None and (startdate is None and enddate is None):
             url = self.url + '&days=' + str(days)
         if startdate is not None and enddate is not None:
@@ -1454,7 +1469,7 @@ class AdminByRequest:
     # Get all requests as JSON
     def get_requests(self,
                     take: int=50,
-                    status: ABR_Status=None,
+                    status: str = None,
                     start_id: int=None,
                     last: int=None,
                     wantscandetails: int=None):
@@ -1464,7 +1479,10 @@ class AdminByRequest:
         elif last is not None:
             url += "?last=" + str(last)
         if status is not None:
-            url += '&status=' + str(status)
+            if type(status) == ABR_Status:
+                url += '&status=' + status.value
+            else:
+                url += '&status=' + status
         if start_id is not None:
             url += '&startid=' + str(start_id)
         if wantscandetails is not None:
@@ -1892,8 +1910,17 @@ class AdminByRequest:
      
     # /pin - Pin Code API extension (Extension of the Invetory API)
     # Get pin code as String from the computer's Inventory by computer id
-    def get_pin_id(self, id: int):
-        url = self.url + 'inventory/' + str(id) + '/pin'
+    def pin_computer(self, id=None, computername=None) -> str:
+        if id is not None:
+            return self.url + 'inventory/' + str(id) + '/pin'
+        elif computername is not None:
+            return self.url + 'inventory/' + computername + '/pin'
+        else:
+            raise ValueError("Either id or computername must be provided")
+    
+    def get_uninstall_pin(self, id=None, computername=None):
+        url : str = self.pin_computer(id=id, computername=computername)
+        url += '?pintype=UninstallPIN'
         headers = {
             "apikey": self.api_key
         }
@@ -1901,13 +1928,15 @@ class AdminByRequest:
         pin = response.json()
         return pin
     
-    # Get pin code as String from the computer's Inventory by computer name
-    def get_pin_computer(self, computername: str):
-        url = self.url + 'inventory/' + computername + '/pin'
+    def get_second_pin(self, id=None, computername=None, pin_one: str = None):
+        if pin_one is None:
+            print("Please Enter Pin 1 to get Pin 2")
+        url : str = self.pin_computer(id=id, computername=computername)
+        url += '?pintype=Challenge'
+        url += '&pin1=' + pin_one
         headers = {
             "apikey": self.api_key
         }
         response = requests.get(url, headers=headers)
         pin = response.json()
         return pin
-    
